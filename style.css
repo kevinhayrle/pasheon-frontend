@@ -55,22 +55,23 @@
   height: 100vh; /* full viewport height */
   display: flex;
   flex-direction: column;
-  padding-top: 60px; /* push below navbar */
+  padding-top: 60px; /* reserve space for navbar */
+  box-sizing: border-box;
 }
 
-/* Hero Section - now takes half height */
 .hero {
-  flex: 1; /* half height */
+  flex: 1;
   background: url('model2.jpg') no-repeat center center/cover;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; /* vertically center content */
+  padding-top: 300px;
   position: relative;
 }
 
 /* Brand name stays centered in hero */
 .brand-name {
-  font-size: 12vw;
+  font-size: 20vw;
   font-family: 'copper';
   color: white;
   text-align: center;
@@ -129,7 +130,7 @@
   }
 
   .brand-name {
-    font-size: 9rem;
+    font-size: 10rem;
   }
 }
 
