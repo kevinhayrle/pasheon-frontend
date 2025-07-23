@@ -80,13 +80,13 @@
   letter-spacing: 10px;
   margin: 0;
   position: relative;
-  top: -100px;
+  top: -80px;
 }
 
 .section-title{
 
   font-family: 'copper';
-  color: black;
+  color: #01381C;
   width: 100%;
   text-align: center;
   margin: 0;
