@@ -42,7 +42,7 @@
   </section>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    fetch('https://pasheon-backend.onrender.com/api/products')  // <-- Replace with your actual backend URL
+    fetch("https://pasheon-backend.onrender.com/api/products")  // <-- Replace with your actual backend URL
       .then(res => res.json())
       .then(products => {
         const container = document.getElementById('product-container');
