@@ -65,7 +65,7 @@
   display: flex;
   justify-content: center;
   align-items: center; /* vertically center content */
-  padding-top: 300px;
+  padding-top: 150px;
   position: relative;
 }
 
