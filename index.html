@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pasheon</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-left">
+      <i class="fas fa-bars"></i>
+    </div>
+    <div class="nav-center">
+      <!-- Crown Logo Placeholder -->
+      <div class="logo">
+        <img src="logo.png" alt="Pasheon Logo" class="logo-img">
+      </div>
+    </div>
+    <div class="nav-right">
+      <i class="fas fa-shopping-cart"></i>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1 class="brand-name"><strong>PASHEON</strong></h1>
+  </section>
+
+  <!-- Product Section (Empty Placeholder for Dynamic Content) -->
+  <section id="products-section">
+    <h2 class="section-title">New Arrivals</h2>
+    <div id="product-container" class="product-grid">
+      <!-- Products will load here dynamically -->
+    </div>
+  </section>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    fetch('https://pasheon-backend.onrender.com')  // <-- Replace with your actual backend URL
+      .then(res => res.json())
+      .then(products => {
+        const container = document.getElementById('product-container');
+
+        products.forEach(product => {
+          const productCard = document.createElement('div');
+          productCard.classList.add('product-card');
+
+          productCard.innerHTML = `
+            <img src="${product.image_url}" alt="${product.name}" class="product-image">
+            <h3 class="product-name">${product.name}</h3>
+            <p class="product-price">₹${parseFloat(product.price).toLocaleString()}</p>
+            <p class="product-category">${product.category}</p>
+          `;
+
+          container.appendChild(productCard);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+  });
+</script>
+</body>
+</html>
