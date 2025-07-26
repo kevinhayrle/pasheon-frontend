@@ -42,30 +42,57 @@
   </section>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      fetch("https://pasheon-backend.onrender.com/api/products")
-        .then(res => res.json())
-        .then(products => {
-          const container = document.getElementById('product-container');
+  document.addEventListener('DOMContentLoaded', () => {
+    fetch("https://pasheon-backend.onrender.com/api/products")
+      .then(res => res.json())
+      .then(products => {
+        const container = document.getElementById('product-container');
 
-          products.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.classList.add('product-card');
+        products.forEach(product => {
+          const productCard = document.createElement('div');
+          productCard.classList.add('product-card');
 
-            productCard.innerHTML = `
-              <img src="${product.image_url}" alt="${product.name}" class="product-image">
-              <h3 class="product-name">${product.name}</h3>
-              <p class="product-price">₹${parseFloat(product.price).toLocaleString()}</p>
-              <p class="product-category">${product.category}</p>
-            `;
+          productCard.innerHTML = `
+            <img src="${product.image_url}" alt="${product.name}" class="product-image">
+            <h3 class="product-name">${product.name}</h3>
+            <p class="product-price">₹${parseFloat(product.price).toLocaleString()}</p>
+            <p class="product-category">${product.category}</p>
+            <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
+          `;
 
-            container.appendChild(productCard);
-          });
-        })
-        .catch(error => {
-          console.error('Error fetching products:', error);
+          container.appendChild(productCard);
         });
-    });
-  </script>
+
+        // Add click listener to each Add to Cart button
+        document.querySelectorAll('.add-to-cart').forEach(button => {
+          button.addEventListener('click', (e) => {
+            const productId = e.target.getAttribute('data-id');
+            const selectedProduct = products.find(p => p.id == productId);
+
+            // Retrieve or initialize cart from localStorage
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+            // Add product to cart
+            cart.push({
+              id: selectedProduct.id,
+              name: selectedProduct.name,
+              price: selectedProduct.price,
+              image_url: selectedProduct.image_url,
+              category: selectedProduct.category
+            });
+
+            // Save cart back
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            // Redirect to cart page
+            window.location.href = '/cart.html';
+          });
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+  });
+</script>
 </body>
 </html>
