@@ -313,21 +313,21 @@
       return;
     }
 
-    data.forEach(p => {
-      const div = document.createElement("div");
-      div.className = "product";
-      div.innerHTML = `
-        <div class="product-info">
-          <span class="product-name">${p.name}</span><br>
-          <span class="product-price">₹${p.price}</span><br>
-          <span class="product-category">Category: ${p.category}</span>
-        </div>
-        <div class="action-btns">
-          <button class="edit-btn" onclick="editProduct('${p.product_id}', '${p.name}', '${p.price}', '${p.category}', '${p.image_url || ''}', '${p.description || ''}')">Edit</button>
-          <button class="delete-btn" onclick="deleteProduct('${p.product_id}')">Delete</button>
-        </div>`;
-      list.appendChild(div);
-    });
+data.forEach(p => {
+  const div = document.createElement("div");
+  div.className = "product";
+  div.innerHTML = `
+    <div class="product-info">
+      <span class="product-name">${p.name}</span><br>
+      <span class="product-price">₹${p.price}</span><br>
+      <span class="product-category">Category: ${p.category}</span>
+    </div>
+    <div class="action-btns">
+      <button class="edit-btn" onclick="editProduct('${p.id}', '${p.name}', '${p.price}', '${p.category}', '${p.image_url || ''}', '${p.description || ''}')">Edit</button>
+      <button class="delete-btn" onclick="deleteProduct('${p.id}')">Delete</button>
+    </div>`;
+  list.appendChild(div);
+});
   }
 
   function logout() {
