@@ -234,14 +234,13 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const id = document.getElementById("editingId").value;
       const name = document.getElementById("name").value;
-      const price = document.getElementById("price").value;
-      const category = document.getElementById("category").value;
-      const image_url = document.getElementById("image").value;
+const price = document.getElementById("price").value;
+const category = document.getElementById("category").value;
+const image_url = document.getElementById("image").value;
+const description = document.getElementById("description").value;
 
-      const productData = { name, price, category, image_url };
-
+const productData = { name, price, category, image_url, description };
       const endpoint = id ? `/admin/update/${id}` : "/admin/add";
       const method = id ? "PUT" : "POST";
 
