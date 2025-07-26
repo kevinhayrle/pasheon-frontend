@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Category | Pasheon</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="nav-left">
+      <img src="hamburger.svg" alt="Menu" class="nav-icon" />
+    </div>
+    <div class="nav-center">
+      <img src="crown-logo.png" alt="Pasheon Logo" class="nav-logo" />
+    </div>
+    <div class="nav-right">
+      <img src="heart.svg" alt="Wishlist" class="nav-icon" />
+      <img src="cart.svg" alt="Cart" class="nav-icon" />
+    </div>
+  </div>
+
+  <!-- Category Title -->
+  <h2 class="category-title" style="text-align: center; margin-top: 80px; font-family: 'copper'; font-size: 32px;"></h2>
+
+  <!-- Product Grid -->
+  <div class="product-grid" style="margin-top: 20px;"></div>
+
+  <!-- Script to fetch and filter products by category -->
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const selectedCategory = params.get("cat");
+
+    document.querySelector(".category-title").textContent = selectedCategory 
+      ? `Category: ${selectedCategory}` 
+      : "All Products";
+
+    fetch("https://pasheon-backend.onrender.com/api/products")
+      .then(res => res.json())
+      .then(products => {
+        const grid = document.querySelector(".product-grid");
+        if (!selectedCategory) return;
+
+        const filtered = products.filter(p =>
+          p.category && p.category.toLowerCase() === selectedCategory.toLowerCase()
+        );
+
+        if (filtered.length === 0) {
+          grid.innerHTML = <p style="text-align:center; font-family:sans-serif;">No products found in category: ${selectedCategory}</p>;
+          return;
+        }
+
+        filtered.forEach(product => {
+          const card = document.createElement("div");
+          card.className = "product-card";
+          card.innerHTML = `
+            <img src="${product.image_url}" alt="${product.name}">
+            <h3>${product.name}</h3>
+            <p>₹${product.price}</p>
+          `;
+          grid.appendChild(card);
+        });
+      })
+      .catch(error => {
+        console.error("Error loading products:", error);
+        document.querySelector(".product-grid").innerHTML = <p style="text-align:center;">Error loading products.</p>;
+      });
+  </script>
+
+</body>
+</html>

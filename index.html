@@ -15,8 +15,11 @@
   <!-- Top Navigation Bar -->
   <header class="navbar">
     <div class="nav-left">
-      <i class="fas fa-bars"></i>
-    </div>
+  <i class="fas fa-bars" onclick="toggleCategoryMenu()"></i>
+  <div id="category-menu" class="category-dropdown" style="display: none;">
+    <!-- Categories will be injected here -->
+  </div>
+</div>
     <div class="nav-center">
       <!-- Crown Logo Placeholder -->
       <div class="logo">
@@ -97,6 +100,25 @@
         console.error('Error fetching products:', error);
       });
   });
+  function toggleCategoryMenu() {
+    const menu = document.getElementById('category-menu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  }
+
+  fetch('https://pasheon-backend.onrender.com/api/products/categories')
+    .then(res => res.json())
+    .then(categories => {
+      const menu = document.getElementById('category-menu');
+      categories.forEach(cat => {
+        const item = document.createElement('a');
+        item.href = `category.html?cat=${encodeURIComponent(cat)}`;
+        item.textContent = cat.charAt(0).toUpperCase() + cat.slice(1);
+        item.classList.add('category-link'); // Style this in CSS
+        menu.appendChild(item);
+      });
+    })
+    .catch(err => console.error('Error loading categories:', err));
+</script>
 </script>
 </body>
 </html>

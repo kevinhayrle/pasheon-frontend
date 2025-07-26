@@ -400,3 +400,25 @@ body, html {
 .add-to-cart:hover {
   background-color: #333;
 }
+.category-dropdown {
+  position: absolute;
+  top: 60px;
+  left: 10px;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  z-index: 999;
+  display: none;
+  flex-direction: column;
+}
+
+.category-link {
+  display: block;
+  padding: 8px 12px;
+  text-decoration: none;
+  color: #333;
+}
+
+.category-link:hover {
+  background-color: #f0f0f0;
+}
