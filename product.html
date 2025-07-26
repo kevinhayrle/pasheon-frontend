@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Detail - Pasheon</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <div class="nav-left">
+      <i class="fas fa-bars"></i>
+    </div>
+    <div class="nav-center">
+      <img src="log.png" alt="Logo" class="log-img">
+    </div>
+    <div class="nav-right">
+      <i class="fas fa-shopping-cart"></i>
+    </div>
+  </div>
+
+  <!-- Product Detail Container -->
+  <div class="container" id="product-detail-container" style="padding: 80px 20px;">
+    <div class="product-detail" style="display: flex; flex-direction: column; align-items: center;">
+      <div class="main-image">
+        <img id="main-product-image" src="" alt="Product Image" class="product-image" style="max-width: 400px; border-radius: 8px;">
+      </div>
+
+      <div class="extra-images" id="extra-images" style="display: flex; gap: 10px; margin-top: 15px;"></div>
+
+      <div class="product-info" style="margin-top: 25px; max-width: 600px; text-align: center;">
+        <h2 id="product-name" style="font-family: 'copper'; font-size: 2rem; color: #01381C;"></h2>
+        <p id="product-price" style="font-size: 1.2rem; color: #222;"></p>
+        <p id="product-description" style="margin-top: 10px; color: #333;"></p>
+
+        <button id="add-to-cart" style="margin-top: 20px;" class="add-to-cart">
+          Add to Cart
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FontAwesome for icons -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- JS Logic -->
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id');
+
+    fetch(`https://your-backend-api.com/api/products/${productId}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data.product) return alert('Product not found');
+
+        const { name, description, price, image_url, extra_images } = data.product;
+
+        document.getElementById('main-product-image').src = image_url;
+        document.getElementById('product-name').textContent = name;
+        document.getElementById('product-price').textContent = '₹' + parseFloat(price).toLocaleString();
+        document.getElementById('product-description').textContent = description;
+
+        const extraImagesContainer = document.getElementById('extra-images');
+        if (Array.isArray(extra_images)) {
+          extra_images.forEach(img => {
+            const imgElem = document.createElement('img');
+            imgElem.src = img.image_url;
+            imgElem.classList.add('product-image');
+            imgElem.style.width = '100px';
+            imgElem.style.borderRadius = '6px';
+            imgElem.style.cursor = 'pointer';
+            imgElem.addEventListener('click', () => {
+              document.getElementById('main-product-image').src = img.image_url;
+            });
+            extraImagesContainer.appendChild(imgElem);
+          });
+        }
+
+        // Add to Cart logic
+        document.getElementById('add-to-cart').addEventListener('click', () => {
+          let cart = JSON.parse(localStorage.getItem('cart')) || [];
+          const existing = cart.find(p => p.id == productId);
+          if (!existing) cart.push({ id: productId, name, price, image_url });
+          localStorage.setItem('cart', JSON.stringify(cart));
+          alert('Added to cart!');
+        });
+      })
+      .catch(err => {
+        console.error('Error loading product:', err);
+        alert('Something went wrong.');
+      });
+  </script>
+
+</body>
+</html>

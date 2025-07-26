@@ -52,15 +52,20 @@
         const productCard = document.createElement('div');
         productCard.classList.add('product-card');
 
-        productCard.innerHTML = `
-          <img src="${product.image_url}" alt="${product.name}" class="product-image">
-          <h3 class="product-name">${product.name}</h3>
-          <p class="product-price">₹${parseFloat(product.price).toLocaleString()}</p>
-          <!-- Category removed -->
-          <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
-        `;
+       productCard.innerHTML = `
+  <div class="product-click-area" data-id="${product.id}">
+    <img src="${product.image_url}" alt="${product.name}" class="product-image">
+    <h3 class="product-name">${product.name}</h3>
+    <p class="product-price">₹${parseFloat(product.price).toLocaleString()}</p>
+  </div>
+  <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
+`;
 
         container.appendChild(productCard);
+      productCard.querySelector('.product-click-area').addEventListener('click', () => {
+    window.location.href = `product.html?id=${product.id}`;
+  });
+      
       });
         // Add click listener to each Add to Cart button
         document.querySelectorAll('.add-to-cart').forEach(button => {
