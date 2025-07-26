@@ -29,14 +29,12 @@
       <h1 id="product-name"></h1>
       <p id="product-price" class="product-price"></p>
       <p id="product-description"></p>
-
       <div class="size-section">
-        <label for="sizeSelect">Select Size:</label>
-        <select id="sizeSelect" required>
-          <option value="">-- Select Size --</option>
-        </select>
-      </div>
-
+  <label for="sizeSelect">Select Size:</label>
+  <select id="sizeSelect" required>
+    <option value="">-- Select Size --</option>
+  </select>
+</div>
       <button class="add-to-cart">Add to Cart</button>
     </div>
   </main>
@@ -46,13 +44,14 @@
       const params = new URLSearchParams(window.location.search);
       const productId = params.get('id');
 
-      fetch(`https://pasheon-backend.onrender.com/api/products/${productId}`)
+      fetch(https://pasheon-backend.onrender.com/api/products/${productId})
         .then(res => res.json())
         .then(product => {
+          // Main product content
           document.getElementById('product-image').src = product.image_url;
           document.getElementById('product-name').textContent = product.name;
           document.getElementById('product-description').textContent = product.description;
-          document.getElementById('product-price').textContent = `₹${parseFloat(product.price).toLocaleString()}`;
+          document.getElementById('product-price').textContent = ₹${parseFloat(product.price).toLocaleString()};
 
           // Extra images
           const extraImagesContainer = document.getElementById('extra-images');
@@ -66,34 +65,23 @@
               extraImagesContainer.appendChild(img);
             });
           }
-
-          // Populate sizes
           const sizeSelect = document.getElementById("sizeSelect");
-          (product.sizes || []).forEach(size => {
-            const option = document.createElement("option");
-            option.value = size;
-            option.textContent = size;
-            sizeSelect.appendChild(option);
-          });
-
-          // Add to cart logic
+(product.sizes || []).forEach(size => {
+  const option = document.createElement("option");
+  option.value = size;
+  option.textContent = size;
+  sizeSelect.appendChild(option);
+});
+          // Add to cart
           document.querySelector('.add-to-cart').addEventListener('click', () => {
-            const selectedSize = sizeSelect.value;
-            if (!selectedSize) {
-              alert("Please select a size before adding to cart.");
-              return;
-            }
-
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             cart.push({
               id: product.id,
               name: product.name,
               price: product.price,
               image_url: product.image_url,
-              category: product.category,
-              size: selectedSize
+              category: product.category
             });
-
             localStorage.setItem('cart', JSON.stringify(cart));
             window.location.href = '/cart.html';
           });
@@ -103,6 +91,7 @@
         });
     });
 
+    // Fullscreen image viewer
     function openFullscreenImage(url) {
       const overlay = document.createElement('div');
       overlay.style.position = 'fixed';

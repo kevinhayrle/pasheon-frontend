@@ -204,19 +204,9 @@
           <label for="category">Category</label>
           <input type="text" id="category" required />
         </div>
-<div class="form-group">
+        <div class="form-group">
   <label for="description">Description</label>
   <input type="text" id="description" required />
-</div>
-
-<div class="form-group">
-  <label for="sizes">Sizes (comma-separated)</label>
-  <input type="text" id="sizes" placeholder="e.g., S, M, L or 7, 8, 9" />
-</div>
-
-<div class="form-group">
-  <label for="extra_images">Extra Image URLs (comma-separated)</label>
-  <input type="text" id="extra_images" placeholder="e.g., https://image1.jpg, https://image2.jpg" />
 </div>
         <div class="form-group">
           <label for="image">Image URL</label>
@@ -256,12 +246,7 @@
     const image_url = document.getElementById("image").value;
     const description = document.getElementById("description").value;
 
-const extra_images = document.getElementById("extra_images").value
-  .split(",")
-  .map(url => url.trim())
-  .filter(Boolean);
-
-const productData = { name, price, category, image_url, description, sizes, extra_images };
+    const productData = { name, price, category, image_url, description };
     const endpoint = id ? `/admin/update/${id}` : "/admin/add";
     const method = id ? "PUT" : "POST";
 
@@ -286,18 +271,16 @@ const productData = { name, price, category, image_url, description, sizes, extr
   });
 
   // ✅ Added description to editing logic
-function editProduct(id, name, price, category, image, description, sizes = [], extra_images = []) {
-  document.getElementById("editingId").value = id;
-  document.getElementById("name").value = name;
-  document.getElementById("price").value = price;
-  document.getElementById("category").value = category;
-  document.getElementById("image").value = image || "";
-  document.getElementById("description").value = description || "";
-  document.getElementById("sizes").value = sizes.join(", ");
-  document.getElementById("extra_images").value = extra_images.join(", ");
-  submitBtn.textContent = "Update Product";
-  formTitle.textContent = "Edit Product";
-}
+  function editProduct(id, name, price, category, image, description) {
+    document.getElementById("editingId").value = id;
+    document.getElementById("name").value = name;
+    document.getElementById("price").value = price;
+    document.getElementById("category").value = category;
+    document.getElementById("image").value = image || "";
+    document.getElementById("description").value = description || "";
+    submitBtn.textContent = "Update Product";
+    formTitle.textContent = "Edit Product";
+  }
 
   async function fetchProducts() {
   try {
