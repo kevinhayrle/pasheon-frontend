@@ -205,6 +205,10 @@
           <input type="text" id="category" required />
         </div>
         <div class="form-group">
+  <label for="description">Description</label>
+  <input type="text" id="description" required />
+</div>
+        <div class="form-group">
           <label for="image">Image URL</label>
           <input type="text" id="image" />
         </div>
@@ -218,116 +222,120 @@
     </div>
   </div>
 
-  <script>
-    const token = localStorage.getItem("adminToken");
-    const API = "https://pasheon-backend.onrender.com/api";
+<!-- ✅ MODIFIED SECTION in your existing file -->
+<script>
+  const token = localStorage.getItem("adminToken");
+  const API = "https://pasheon-backend.onrender.com/api";
 
-    if (!token) {
-      alert("Unauthorized. Redirecting to login...");
-      window.location.href = "admin-login.html";
-    }
+  if (!token) {
+    alert("Unauthorized. Redirecting to login...");
+    window.location.href = "admin-login.html";
+  }
 
-    const form = document.getElementById("productForm");
-    const submitBtn = document.getElementById("submitBtn");
-    const formTitle = document.getElementById("formTitle");
+  const form = document.getElementById("productForm");
+  const submitBtn = document.getElementById("submitBtn");
+  const formTitle = document.getElementById("formTitle");
 
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-      const name = document.getElementById("name").value;
-const price = document.getElementById("price").value;
-const category = document.getElementById("category").value;
-const image_url = document.getElementById("image").value;
-const description = document.getElementById("description").value;
+    const id = document.getElementById("editingId").value; // ✅ FIXED LINE
+    const name = document.getElementById("name").value;
+    const price = document.getElementById("price").value;
+    const category = document.getElementById("category").value;
+    const image_url = document.getElementById("image").value;
+    const description = document.getElementById("description").value;
 
-const productData = { name, price, category, image_url, description };
-      const endpoint = id ? `/admin/update/${id}` : "/admin/add";
-      const method = id ? "PUT" : "POST";
+    const productData = { name, price, category, image_url, description };
+    const endpoint = id ? `/admin/update/${id}` : "/admin/add";
+    const method = id ? "PUT" : "POST";
 
-      const res = await fetch(`${API}${endpoint}`, {
-        method: method,
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify(productData),
-      });
-
-      if (res.ok) {
-        form.reset();
-        document.getElementById("editingId").value = "";
-        submitBtn.textContent = "Add Product";
-        formTitle.textContent = "Add New Product";
-        fetchProducts();
-      } else {
-        alert("Failed to save product.");
-      }
+    const res = await fetch(`${API}${endpoint}`, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: Bearer `${token}`,
+      },
+      body: JSON.stringify(productData),
     });
 
-    function editProduct(id, name, price, category, image) {
-      document.getElementById("editingId").value = id;
-      document.getElementById("name").value = name;
-      document.getElementById("price").value = price;
-      document.getElementById("category").value = category;
-      document.getElementById("image").value = image || "";
-      submitBtn.textContent = "Update Product";
-      formTitle.textContent = "Edit Product";
+    if (res.ok) {
+      form.reset();
+      document.getElementById("editingId").value = "";
+      submitBtn.textContent = "Add Product";
+      formTitle.textContent = "Add New Product";
+      fetchProducts();
+    } else {
+      alert("Failed to save product.");
+    }
+  });
+
+  // ✅ Added description to editing logic
+  function editProduct(id, name, price, category, image, description) {
+    document.getElementById("editingId").value = id;
+    document.getElementById("name").value = name;
+    document.getElementById("price").value = price;
+    document.getElementById("category").value = category;
+    document.getElementById("image").value = image || "";
+    document.getElementById("description").value = description || "";
+    submitBtn.textContent = "Update Product";
+    formTitle.textContent = "Edit Product";
+  }
+
+  async function deleteProduct(id) {
+    if (!confirm("Delete this product?")) return;
+
+    const res = await fetch(`${API}/admin/delete/${id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: Bearer `${token}`,
+      },
+    });
+
+    if (res.ok) {
+      fetchProducts();
+    } else {
+      alert("Failed to delete product.");
+    }
+  }
+
+  async function fetchProducts() {
+    const res = await fetch(`${API}/admin/products`, {
+      headers: { Authorization: Bearer `${token}` },
+    });
+
+    const data = await res.json();
+    const list = document.getElementById("productList");
+    list.innerHTML = "";
+
+    if (!data.length) {
+      list.innerHTML = "<p>No products found.</p>";
+      return;
     }
 
-    async function deleteProduct(id) {
-      if (!confirm("Delete this product?")) return;
+    data.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "product";
+      div.innerHTML = `
+        <div class="product-info">
+          <span class="product-name">${p.name}</span><br>
+          <span class="product-price">₹${p.price}</span><br>
+          <span class="product-category">Category: ${p.category}</span>
+        </div>
+        <div class="action-btns">
+          <button class="edit-btn" onclick="editProduct('${p.product_id}', '${p.name}', '${p.price}', '${p.category}', '${p.image_url || ''}', '${p.description || ''}')">Edit</button>
+          <button class="delete-btn" onclick="deleteProduct('${p.product_id}')">Delete</button>
+        </div>`;
+      list.appendChild(div);
+    });
+  }
 
-      const res = await fetch(`${API}/admin/delete/${id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  function logout() {
+    localStorage.removeItem("adminToken");
+    window.location.href = "admin-login.html";
+  }
 
-      if (res.ok) {
-        fetchProducts();
-      } else {
-        alert("Failed to delete product.");
-      }
-    }
-
-    async function fetchProducts() {
-      const res = await fetch(`${API}/admin/products`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      const data = await res.json();
-      const list = document.getElementById("productList");
-      list.innerHTML = "";
-
-      if (!data.length) {
-        list.innerHTML = "<p>No products found.</p>";
-        return;
-      }
-
-      data.forEach(p => {
-        const div = document.createElement("div");
-        div.className = "product";
-        div.innerHTML = `
-          <div class="product-info">
-            <span class="product-name">${p.name}</span><br>
-            <span class="product-price">₹${p.price}</span><br>
-            <span class="product-category">Category: ${p.category}</span>
-          </div>
-          <div class="action-btns">
-            <button class="edit-btn" onclick="editProduct('${p.product_id}', '${p.name}', '${p.price}', '${p.category}', '${p.image_url || ''}')">Edit</button>
-            <button class="delete-btn" onclick="deleteProduct('${p.product_id}')">Delete</button>
-          </div>`;
-        list.appendChild(div);
-      });
-    }
-
-    function logout() {
-      localStorage.removeItem("adminToken");
-      window.location.href = "admin-login.html";
-    }
-
-    fetchProducts();
-  </script>
+  fetchProducts();
+</script>
 </body>
 </html>
