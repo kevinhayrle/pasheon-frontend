@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <title>Admin Dashboard - Pasheon</title>
   <style>
+
+    @font-face {
+  font-family: 'copper';
+  src: url('Copperplate Gothic Bold.otf') format('opentype');
+}
+
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
@@ -103,7 +109,7 @@
               <span class="product-price">₹${p.price}</span>
               <span class="product-category">${p.category}</span>
             </div>
-            <button class="delete-btn" onclick="deleteProduct('${p._id}')">Delete</button>
+            <button class="delete-btn" onclick="deleteProduct('${p.product_id}')">Delete</button>
           `;
           list.appendChild(div);
         });
