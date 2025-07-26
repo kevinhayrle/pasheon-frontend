@@ -244,9 +244,18 @@
     const price = document.getElementById("price").value;
     const category = document.getElementById("category").value;
     const image_url = document.getElementById("image").value;
+    const image2 = document.getElementById("image2").value;
+const image3 = document.getElementById("image3").value;
     const description = document.getElementById("description").value;
 
-    const productData = { name, price, category, image_url, description };
+    const productData = {
+  name,
+  price,
+  category,
+  image_url,
+  description,
+  extra_images: [image2, image3].filter(url => url)  // only keep non-empty
+};
     const endpoint = id ? `/admin/update/${id}` : "/admin/add";
     const method = id ? "PUT" : "POST";
 
