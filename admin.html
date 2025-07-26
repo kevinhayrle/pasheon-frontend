@@ -254,7 +254,7 @@
       method: method,
       headers: {
         "Content-Type": "application/json",
-        Authorization: Bearer `${token}`,
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(productData),
     });
@@ -288,7 +288,7 @@
     const res = await fetch(`${API}/admin/delete/${id}`, {
       method: "DELETE",
       headers: {
-        Authorization: Bearer `${token}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
