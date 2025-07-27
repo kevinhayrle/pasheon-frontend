@@ -1,75 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cart - Pasheon</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart - Pasheon</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    /* Cart Layout Styles */
-    #cart-container {
-      padding: 80px 20px 40px;
-      max-width: 1000px;
-      margin: auto;
+    .cart-container {
+      max-width: 900px;
+      margin: 10px auto 40px;
+      padding: 20px;
     }
 
     .cart-item {
+    
       display: flex;
-      flex-direction: row;
       align-items: center;
-      border: 1px solid #ccc;
-      margin-bottom: 15px;
-      padding: 10px;
-      border-radius: 8px;
-      flex-wrap: wrap;
+      border-bottom: 1px solid #ccc;
+      padding: 15px 0;
+      gap: 15px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     .cart-item img {
-      width: 100px;
+      width: 80px;
       height: 100px;
       object-fit: cover;
-      border-radius: 5px;
-      margin-right: 15px;
+      border-radius: 0px;
     }
 
     .cart-details {
-      flex: 1;
-      min-width: 200px;
+      flex-grow: 1;
+      
     }
 
     .cart-details h3 {
-      margin: 0 0 5px;
       font-size: 18px;
+      margin-bottom: 5px;
+      
     }
 
     .cart-details p {
+      font-size: 14px;
       margin: 4px 0;
-      font-size: 15px;
+      
     }
 
     .remove-btn {
-      background-color: #e53935;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      border-radius: 4px;
-      cursor: pointer;
+      padding: 3px 12px;
       font-size: 14px;
-      margin-top: 8px;
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      border-radius: 0px;
+      cursor: pointer;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     #checkout-btn {
       display: block;
-      width: 100%;
-      max-width: 400px;
-      margin: 20px auto 40px;
-      padding: 14px;
-      font-size: 18px;
-      background-color: black;
-      color: white;
+      margin: 20px auto 0;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #000;
+      color: #fff;
       border: none;
-      border-radius: 6px;
+      border-radius: 0px;
       cursor: pointer;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .grand-total {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: -40px;
+    }
+
+    .title-cart {
+      text-align: center;
+      margin-top: 100px;
+      font-size: 22px;
+      font-weight: bold;
     }
 
     @media (max-width: 600px) {
@@ -81,7 +94,6 @@
       .cart-item img {
         width: 100%;
         height: auto;
-        margin-bottom: 10px;
       }
 
       .cart-details {
@@ -89,106 +101,149 @@
       }
 
       .remove-btn {
+        width: 100%;
         margin-top: 10px;
       }
     }
   </style>
 </head>
 <body>
-   Header -->
+
+  <!-- Header -->
   <header class="navbar">
-    <div id="hamburger-cart" class="hamburger" style="color:#01381C; font-size: 20px;",>&#9776;</div>
+    <div class="navbar-left">
+      <img id="hamburger-cart" src="hamburger.png" alt="Menu" width="30" height="30" />
+    </div>
     <div class="nav-center">
-    <a href="index.html" class="logo" style="align-items: center;">
-      <img src="log.png" alt="Pasheon Logo" class="log-img" style="align-items: center;">
+    <a href="index.html" class="logo">
+      <img src="log.png" alt="Pasheon Logo" class="log-img">
     </a>
   </div>
+    <div class="navbar-right" >
+      <a href="cart.html">
+        <img src="bag.png" alt="Cart" width="39" height="39" />
+      </a>
+    </div>
   </header>
 
   <!-- Sidebar -->
-  <div id="sidebar-cart" class="sidebar">
-    <div id="close-sidebar-cart" class="close-btn">&times;</div>
-    <a href="index.html">Home</a>
-    <a href="#">Contact</a>
+  <aside id="sidebar-cart" class="sidebar">
+    <span id="close-sidebar-cart" class="close-btn">&times;</span>
+    <a href="index.html"><strong>HOME</strong></a>
+    <a href="contact.html"><strong>CONTACT</strong></a>
+    <br></br>
+          <h1 style="font-weight: lighter; color: #01381C; font-size: large;">COLLECTIONS<br></h1>
+              <h1 style="font-weight: lighter; color: #01381C;" >__________</h1><br>
     <div id="category-links-cart"></div>
-  </div>
+  </aside>
 
-  <!-- Cart Items -->
-  <section id="cart-container">
-    <!-- Cart items will be injected here -->
-  </section>
+  <!-- Cart Title -->
+  <div class="title-cart">Your Cart</div>
 
-  <button id="checkout-btn">Proceed to Checkout</button>
+  <!-- Cart Container -->
+  <div id="cart-container" class="cart-container"></div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Hamburger toggle
-      const hamburger = document.getElementById('hamburger-cart');
-      const sidebar = document.getElementById('sidebar-cart');
-      const closeSidebar = document.getElementById('close-sidebar-cart');
+  <!-- Grand Total -->
+  <div id="grand-total" class="grand-total"></div>
 
-      hamburger.addEventListener('click', () => {
-        sidebar.style.left = '0';
-      });
+  <!-- Checkout Button -->
+  <button id="checkout-btn">Checkout</button>
 
-      closeSidebar.addEventListener('click', () => {
-        sidebar.style.left = '-250px';
-      });
+  <!-- Script -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Sidebar toggle
+    const hamburger = document.getElementById('hamburger-cart');
+    const sidebar = document.getElementById('sidebar-cart');
+    const closeSidebar = document.getElementById('close-sidebar-cart');
 
-      // Load categories in sidebar
-      fetch('https://pasheon-backend.onrender.com/api/products/categories')
-        .then(res => res.json())
-        .then(categories => {
-          const links = document.getElementById('category-links-cart');
-          categories.forEach(cat => {
-            const a = document.createElement('a');
-            a.href = `category.html?cat=${encodeURIComponent(cat)}`;
-            a.textContent = cat;
-            links.appendChild(a);
-          });
+    hamburger.addEventListener('click', () => {
+      sidebar.style.left = '0';
+    });
+
+    closeSidebar.addEventListener('click', () => {
+      sidebar.style.left = '-250px';
+    });
+
+    // Load categories
+    fetch('https://pasheon-backend.onrender.com/api/products/categories')
+      .then(res => res.json())
+      .then(categories => {
+        const links = document.getElementById('category-links-cart');
+        categories.forEach(cat => {
+          const a = document.createElement('a');
+          a.href = `category.html?cat=${encodeURIComponent(cat)}`;
+          a.textContent = cat;
+          links.appendChild(a);
         });
+      });
 
-      // Load cart from localStorage
-      const cart = JSON.parse(localStorage.getItem('cart')) || [];
-      const container = document.getElementById('cart-container');
+    const container = document.getElementById('cart-container');
+    const grandTotalEl = document.getElementById('grand-total');
+    const checkoutBtn = document.getElementById('checkout-btn');
+
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+    function updateCartUI() {
+      container.innerHTML = '';
+      let total = 0;
 
       if (cart.length === 0) {
         container.innerHTML = '<p>Your cart is empty.</p>';
-        document.getElementById('checkout-btn').style.display = 'none';
+        grandTotalEl.textContent = '';
+        checkoutBtn.style.display = 'none';
         return;
       }
 
-      cart.forEach(product => {
+      cart.forEach((product, index) => {
+        const sizeText = product.size && product.size.trim() !== '' ? product.size : 'Choose a size';
+        total += parseFloat(product.price);
+
         const item = document.createElement('div');
         item.classList.add('cart-item');
+        item.setAttribute('data-id', product.id);
+        item.setAttribute('data-size', product.size || '');
+
         item.innerHTML = `
           <img src="${product.image_url}" alt="${product.name}" />
           <div class="cart-details">
             <h3>${product.name}</h3>
             <p>₹${parseFloat(product.price).toLocaleString()}</p>
-            <p>Size: ${product.size}</p>
-            <button class="remove-btn" data-id="${product.id}" data-size="${product.size}">Remove</button>
+            <p>Size: ${sizeText}</p>
+            <button class="remove-btn">Remove</button>
           </div>
         `;
+
         container.appendChild(item);
       });
 
-      // Remove from cart
-      container.addEventListener('click', (e) => {
-        if (e.target.classList.contains('remove-btn')) {
-          const id = e.target.getAttribute('data-id');
-          const size = e.target.getAttribute('data-size');
-          const updatedCart = cart.filter(p => !(p.id == id && p.size === size));
-          localStorage.setItem('cart', JSON.stringify(updatedCart));
-          location.reload();
-        }
-      });
+      grandTotalEl.textContent = `Grand Total: ₹${total.toLocaleString()}`;
+      checkoutBtn.style.display = 'block';
+    }
 
-      // Checkout button
-      document.getElementById('checkout-btn').addEventListener('click', () => {
-        window.location.href = 'checkout.html'; // You can change this to your actual checkout page
-      });
+    updateCartUI();
+
+    // Remove item on click
+    container.addEventListener('click', (e) => {
+      if (e.target.classList.contains('remove-btn')) {
+        const item = e.target.closest('.cart-item');
+        const id = item.getAttribute('data-id');
+        const size = item.getAttribute('data-size') || '';
+
+        // Filter and update cart
+        cart = cart.filter(p => !(p.id == id && (p.size || '') === size));
+        localStorage.setItem('cart', JSON.stringify(cart));
+
+        // Refresh cart UI
+        updateCartUI();
+      }
     });
-  </script>
+
+    // Checkout button
+    checkoutBtn.addEventListener('click', () => {
+      window.location.href = 'checkout.html';
+    });
+  });
+</script>
 </body>
 </html>

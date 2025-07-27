@@ -93,18 +93,23 @@
             sizeSelect.appendChild(option);
           });
 
-          document.querySelector('.add-to-cart').addEventListener('click', () => {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            cart.push({
-              id: product.id,
-              name: product.name,
-              price: product.price,
-              image_url: product.image_url,
-              category: product.category
-            });
-            localStorage.setItem('cart', JSON.stringify(cart));
-            window.location.href = '/cart.html';
-          });
+     document.querySelector('.add-to-cart').addEventListener('click', () => {
+  const selectedSize = document.getElementById('sizeSelect').value;
+
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  cart.push({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    image_url: product.image_url,
+    category: product.category,
+    size: selectedSize || "Choose a size"
+  });
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+  window.location.href = '/cart.html';
+});
         })
         .catch(error => {
           console.error('Error fetching product:', error);
