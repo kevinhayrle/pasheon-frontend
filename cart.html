@@ -59,6 +59,7 @@
 
     #checkout-btn {
       display: block;
+      justify-content: space-between;
       margin: 20px auto 0;
       padding: 10px 20px;
       font-size: 16px;
@@ -71,7 +72,7 @@
     }
 
     .grand-total {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       text-align: center;
       font-size: 18px;
       font-weight: bold;
@@ -79,11 +80,19 @@
     }
 
     .title-cart {
-      text-align: center;
-      margin-top: 100px;
-      font-size: 22px;
+      margin-bottom: 70px;
+      text-align: left;
       font-weight: bold;
     }
+
+    .cart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 900px;
+  margin: 100px auto 20px;
+  padding: 0 20px;
+}
 
     @media (max-width: 600px) {
       .cart-item {
@@ -137,17 +146,17 @@
     <div id="category-links-cart"></div>
   </aside>
 
-  <!-- Cart Title ----->
-  <div class="title-cart">Your Cart</div>
+<!-- Cart Title -->
+<div class="title-cart">Y</div>
+
+<!-- Checkout Button -->
+<button id="checkout-btn">Checkout</button>
 
   <!-- Cart Container -->
   <div id="cart-container" class="cart-container"></div>
 
   <!-- Grand Total -->
   <div id="grand-total" class="grand-total"></div>
-
-  <!-- Checkout Button -->
-  <button id="checkout-btn">Checkout</button>
 
   <!-- Script -->
 <script>
