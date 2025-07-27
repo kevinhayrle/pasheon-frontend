@@ -189,7 +189,7 @@
       let total = 0;
 
       if (cart.length === 0) {
-        container.innerHTML = '<p>Your cart is empty.</p>';
+        container.innerHTML = '<p>No items in your cart. Please add products before proceeding to checkout</p>';
         grandTotalEl.textContent = '';
         checkoutBtn.style.display = 'none';
         return;
