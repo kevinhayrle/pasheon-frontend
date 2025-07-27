@@ -96,15 +96,21 @@
      document.querySelector('.add-to-cart').addEventListener('click', () => {
   const selectedSize = document.getElementById('sizeSelect').value;
 
+  if (!selectedSize) {
+    alert("Please select a size before adding to cart.");
+    return;
+  }
+
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
   cart.push({
-    id: product.id,
+    id: product._id, // ✅ Use _id from backend
     name: product.name,
     price: product.price,
     image_url: product.image_url,
     category: product.category,
-    size: selectedSize || "Choose a size"
+    size: selectedSize,
+    quantity: 1 // ✅ Add default quantity
   });
 
   localStorage.setItem('cart', JSON.stringify(cart));
