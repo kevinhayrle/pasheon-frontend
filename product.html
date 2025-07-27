@@ -10,7 +10,6 @@
 </head>
 <body>
 
-  <!-- Top Navigation Bar -->
   <header class="navbar">
     <div class="nav-left">
       <i class="fas fa-bars" id="hamburger-product"></i>
@@ -27,7 +26,6 @@
     </div>
   </header>
 
-  <!-- Product Page Sidebar -->
   <nav id="sidebar-product" class="sidebar">
     <ul>
       <li><a href="index.html"><strong>HOME</strong></a></li>
@@ -36,7 +34,7 @@
       <li><a>COLLECTION</a></li>
     </ul>
     <ul id="category-list">
-      <!-- Categories will be dynamically loaded here -->
+    
     </ul>
   </nav>
 
@@ -103,7 +101,7 @@ document.querySelector('.add-to-cart').addEventListener('click', () => {
   let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
   cart.push({
-    id: product.id, // ✅ Fixed here
+    id: product.id, 
     name: product.name,
     price: product.price,
     image_url: product.image_url,

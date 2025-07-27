@@ -1,4 +1,4 @@
-/* Reset */
+
 * {
   margin: 0;
   padding: 0;
@@ -15,7 +15,6 @@ body, html {
   font-family: Arial, sans-serif;
 }
 
-/* Navbar */
 .navbar {
   position: fixed;
   top: 0;
@@ -56,7 +55,6 @@ body, html {
   filter: brightness(0) saturate(100%) invert(15%) sepia(99%) saturate(1128%) hue-rotate(95deg) brightness(93%) contrast(96%);
 }
 
-/* Container for hero and product sections */
 .container {
   min-height: 100vh;
   display: flex;
@@ -65,7 +63,7 @@ body, html {
   box-sizing: border-box;
 }
 
-/* Hero Section */
+
 .hero {
   flex: 1;
   background: url('model2.jpg') no-repeat center center/cover;
@@ -87,7 +85,6 @@ body, html {
   top: -90px;
 }
 
-/* Section Title */
 .section-title {
   font-family: 'copper';
   color: #01381C;
@@ -97,18 +94,17 @@ body, html {
   font-size: 2rem;
 }
 
-/* Products Grid */
+
 .products {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 1.5rem;
   padding: 2rem 1rem;
-  background: lightgrey; /* Match body */
+  background: lightgrey; 
 }
 
-/* Individual Product Card */
 .product {
-  background: lightgrey; /* Same as page background */
+  background: lightgrey; 
   border: 1px solid #ccc;
   border-radius: 8px;
   text-align: center;
@@ -136,14 +132,13 @@ body, html {
   margin-bottom: 1rem;
 }
 
-/* Responsive font size on large screens */
 @media (min-width: 900px) {
   .brand-name {
     font-size: 7rem;
   }
 }
 
-/* Fade-up animation */
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -161,7 +156,7 @@ body, html {
   transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-/* Class added when in viewport */
+
 .product-card.animate {
   opacity: 1;
   transform: translateY(0);
@@ -239,7 +234,7 @@ body, html {
 
 .product-card {
   width: 100%;
-  max-width: 300px; /* Controls card width */
+  max-width: 300px; 
   margin: 15px;
   text-align: center;
   flex-shrink: 0;
@@ -261,7 +256,7 @@ body, html {
   padding: 20px;
 }
 
-/* Product Page Main Wrapper */
+
 .single-product-page {
   background: lightgrey;
   font-family: Arial, sans-serif;
@@ -272,7 +267,6 @@ body, html {
   align-items: flex-start;
 }
 
-/* Product Details Container */
 .single-product-container {
   background: white;
   border-radius: 8px;
@@ -285,7 +279,6 @@ body, html {
   gap: 30px;
 }
 
-/* Main image */
 .main-product-image {
   width: 100%;
   border-radius: 8px;
@@ -294,7 +287,6 @@ body, html {
   background-color: #f9f9f9;
 }
 
-/* Product Title & Price */
 .product-details h1 {
   font-family: 'copper';
   color: #01381C;
@@ -309,7 +301,6 @@ body, html {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Description */
 .product-details p.description {
   font-size: 1rem;
   color: #555;
@@ -318,7 +309,6 @@ body, html {
 
 }
 
-/* Add to Cart Button */
 .add-to-cart-btn {
   padding: 12px 20px;
   background-color: #01381C;
@@ -339,7 +329,6 @@ body, html {
   
 }
 
-/* Extra Images Row */
 .extra-images {
   display: flex;
   flex-wrap: wrap;
@@ -500,8 +489,6 @@ margin-top: 50px;
   transform: translateY(0);
 }
 
-
-/* ==== PRODUCT PAGE SIDEBAR ONLY ==== */
 #hamburger-product {
   font-size: 22px;
   cursor: pointer;
@@ -512,7 +499,7 @@ margin-top: 50px;
 
 #sidebar-product {
   position: fixed;
-  top: 10px; /* below navbar */
+  top: 10px; 
   left: -250px;
   width: 250px;
   height: 100%;
