@@ -5,218 +5,249 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Pasheon - Cart</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
   <style>
+    /* CART-SPECIFIC STYLES */
     .cart-section {
-      padding: 100px 20px 40px;
+      padding: 80px 20px 40px;
+      max-width: 1000px;
+      margin: auto;
     }
 
     .cart-title {
-      font-size: 32px;
+      text-align: center;
       margin-bottom: 20px;
-      text-align: center;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-size: 24px;
+      font-weight: bold;
     }
 
-    .cart-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 30px;
+    .cart-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
 
-    .cart-table th, .cart-table td {
+    .cart-item {
+      display: flex;
+      gap: 16px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
       padding: 12px;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      text-align: center;
-      border-bottom: 1px solid #ccc;
+      background-color: #fff;
+      flex-wrap: wrap;
+      align-items: center;
     }
 
-    .cart-table img {
-      width: 60px;
+    .cart-item img {
+      width: 100px;
       height: auto;
+      border-radius: 8px;
+      object-fit: cover;
     }
 
-    .remove-btn {
-      background: salmon;
-      color: white;
-      border: none;
-      padding: 4px 10px;
-      cursor: pointer;
+    .cart-details {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .cart-details h4 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .cart-details p {
+      font-size: 14px;
+      margin: 3px 0;
+    }
+
+    .cart-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: flex-start;
     }
 
     .quantity-input {
-      width: 50px;
-      padding: 4px;
+      width: 60px;
+      padding: 6px;
       text-align: center;
-    font-family: 'Segoe UI';
+      font-size: 14px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    .remove-btn {
+      background: crimson;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
     }
 
     .total-row {
       text-align: right;
-      font-size: 20px;
+      font-size: 18px;
       font-weight: bold;
-      padding-right: 20px;
+      margin-top: 20px;
     }
 
     .checkout-btn {
       display: block;
-      margin: 0 auto;
-      padding: 12px 24px;
-      font-size: 18px;
-      background: black;
+      margin: 30px auto 0;
+      background-color: black;
       color: white;
       border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 8px;
       cursor: pointer;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    @media (max-width: 600px) {
+      .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .cart-actions {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+      }
+
+      .cart-details {
+        width: 100%;
+      }
     }
   </style>
 </head>
 <body>
 
-<!-- Navbar -->
-<header class="navbar">
-  <div class="nav-left">
-    <i class="fas fa-bars" id="hamburger-icon"></i>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <div id="hamburger-cart" class="hamburger">&#9776;</div>
+    <div class="logo">PASHEON 👑</div>
+    <a href="cart.html" class="cart-icon">🛒</a>
   </div>
-  <div class="nav-center">
-    <a href="index.html" class="logo">
-      <img src="log.png" alt="Pasheon Logo" class="log-img" />
-    </a>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar-cart" class="sidebar">
+    <div id="close-sidebar-cart" class="close-btn">&times;</div>
+    <a href="index.html">Home</a>
+    <a href="#">Contact</a>
+    <div id="category-links-cart"></div>
   </div>
-  <div class="nav-right">
-    <a href="cart.html">
-      <i class="fas fa-shopping-cart"></i>
-    </a>
-  </div>
-</header>
 
-<!-- Sidebar -->
-<div id="sidebar" class="sidebar" style="left: -240px;">
-  <a href="index.html"><strong>HOME</strong></a>
-  <a href="contact.html"><strong>CONTACT US</strong></a><br>
-  <a><strong>COLLECTIONS</strong></a>
-  <hr />
-  <div id="category-menu"></div>
-</div>
+  <!-- CART SECTION -->
+  <section class="cart-section">
+    <h2 class="cart-title">Your Cart</h2>
+    <div id="cart-container" class="cart-container"></div>
+    <div class="total-row" id="grand-total">Grand Total: ₹0</div>
+    <button class="checkout-btn">Proceed to Checkout</button>
+  </section>
 
-<!-- Cart Section -->
-<section class="cart-section">
-  <h2 class="cart-title">Your Cart</h2>
-  <table class="cart-table" id="cart-table">
-    <thead>
-      <tr>
-        <th>Image</th>
-        <th>Product</th>
-        <th>Price (₹)</th>
-        <th>Qty</th>
-        <th>Total (₹)</th>
-        <th>Remove</th>
-      </tr>
-    </thead>
-    <tbody id="cart-items">
-      <!-- Items go here -->
-    </tbody>
-  </table>
+  <script>
+    // SIDEBAR TOGGLE
+    const hamburger = document.getElementById('hamburger-cart');
+    const sidebar = document.getElementById('sidebar-cart');
+    const closeSidebar = document.getElementById('close-sidebar-cart');
 
-  <div class="total-row" id="grand-total">Grand Total: ₹0</div>
-  <button class="checkout-btn">Proceed to Checkout</button>
-</section>
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  // Sidebar logic
-  const hamburger = document.getElementById('hamburger-icon');
-  const sidebar = document.getElementById('sidebar');
-  const categoryLinksContainer = document.getElementById('category-menu');
-
-  if (hamburger && sidebar) {
     hamburger.addEventListener('click', () => {
-      sidebar.style.left = '0';
+      sidebar.classList.add('active');
     });
-  }
 
-  document.addEventListener('click', (e) => {
-    if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
-      sidebar.style.left = '-250px';
-    }
-  });
+    closeSidebar.addEventListener('click', () => {
+      sidebar.classList.remove('active');
+    });
 
-  // Load categories in sidebar
-  fetch('https://pasheon-backend.onrender.com/api/products/categories')
-    .then(res => res.json())
-    .then(categories => {
-      categoryLinksContainer.innerHTML = '';
-      categories.forEach(cat => {
-        const link = document.createElement('a');
-        link.href = `category.html?cat=${encodeURIComponent(cat)}`;
-        link.textContent = cat;
-        categoryLinksContainer.appendChild(link);
+    // FETCH CATEGORIES
+    const categoryLinks = document.getElementById('category-links-cart');
+    fetch('/api/products/categories')
+      .then(res => res.json())
+      .then(categories => {
+        categories.forEach(cat => {
+          const link = document.createElement('a');
+          link.href = `category.html?category=${encodeURIComponent(cat)}`;
+          link.textContent = cat;
+          categoryLinks.appendChild(link);
+        });
       });
-    });
 
-  // Cart logic
-  const cartTable = document.getElementById('cart-items');
-  const grandTotalElem = document.getElementById('grand-total');
+    // CART LOGIC
+    let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartContainer = document.getElementById('cart-container');
+    const grandTotalElem = document.getElementById('grand-total');
 
-  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+    function updateCartDisplay() {
+      cartContainer.innerHTML = '';
+      let grandTotal = 0;
 
-  const updateCartDisplay = () => {
-    cartTable.innerHTML = '';
-    let grandTotal = 0;
+      if (cart.length === 0) {
+        cartContainer.innerHTML = '<p style="text-align:center;">Your cart is empty.</p>';
+        grandTotalElem.textContent = 'Grand Total: ₹0';
+        return;
+      }
 
-    if (cart.length === 0) {
-      cartTable.innerHTML = '<tr><td colspan="6">Your cart is empty.</td></tr>';
-      grandTotalElem.textContent = 'Grand Total: ₹0';
-      return;
+      cart.forEach((item, index) => {
+        const total = item.price * item.quantity;
+        grandTotal += total;
+
+        const card = document.createElement('div');
+        card.className = 'cart-item';
+
+        card.innerHTML = `
+          <img src="${item.image_url}" alt="${item.name}" />
+          <div class="cart-details">
+            <h4>${item.name}</h4>
+            <p>Price: ₹${item.price}</p>
+            <p>Total: ₹${total}</p>
+          </div>
+          <div class="cart-actions">
+            <input type="number" class="quantity-input" value="${item.quantity}" min="1" data-index="${index}" />
+            <button class="remove-btn" data-index="${index}">X</button>
+          </div>
+        `;
+
+        cartContainer.appendChild(card);
+      });
+
+      grandTotalElem.textContent = 'Grand Total: ₹' + grandTotal;
     }
 
-    cart.forEach((item, index) => {
-      const row = document.createElement('tr');
-
-      const total = item.price * item.quantity;
-      grandTotal += total;
-
-      row.innerHTML = `
-        <td><img src="${item.image_url}" alt="${item.name}"/></td>
-        <td>${item.name}</td>
-        <td>${item.price}</td>
-        <td>
-          <input type="number" class="quantity-input" value="${item.quantity}" min="1" data-index="${index}" />
-        </td>
-        <td>₹${total}</td>
-        <td><button class="remove-btn" data-index="${index}">X</button></td>
-      `;
-
-      cartTable.appendChild(row);
+    // EVENT LISTENERS
+    cartContainer.addEventListener('input', (e) => {
+      if (e.target.classList.contains('quantity-input')) {
+        const index = e.target.dataset.index;
+        const newQty = parseInt(e.target.value);
+        if (newQty >= 1) {
+          cart[index].quantity = newQty;
+          localStorage.setItem('cart', JSON.stringify(cart));
+          updateCartDisplay();
+        }
+      }
     });
 
-    grandTotalElem.textContent = 'Grand Total: ₹' + grandTotal;
-  };
-
-  cartTable.addEventListener('click', (e) => {
-    if (e.target.classList.contains('remove-btn')) {
-      const index = e.target.getAttribute('data-index');
-      cart.splice(index, 1);
-      localStorage.setItem('cart', JSON.stringify(cart));
-      updateCartDisplay();
-    }
-  });
-
-  cartTable.addEventListener('change', (e) => {
-    if (e.target.classList.contains('quantity-input')) {
-      const index = e.target.getAttribute('data-index');
-      const newQty = parseInt(e.target.value);
-      if (newQty > 0) {
-        cart[index].quantity = newQty;
+    cartContainer.addEventListener('click', (e) => {
+      if (e.target.classList.contains('remove-btn')) {
+        const index = e.target.dataset.index;
+        cart.splice(index, 1);
         localStorage.setItem('cart', JSON.stringify(cart));
         updateCartDisplay();
       }
-    }
-  });
+    });
 
-  updateCartDisplay();
-});
-</script>
+    document.querySelector('.checkout-btn').addEventListener('click', () => {
+      if (cart.length === 0) {
+        alert('Cart is empty!');
+        return;
+      }
+      // Redirect to payment page or Razorpay integration
+      alert('Proceeding to checkout...');
+    });
 
+    updateCartDisplay();
+  </script>
 </body>
 </html>
