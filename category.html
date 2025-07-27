@@ -99,8 +99,33 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         productContainer.appendChild(card);
 
+        // Navigate to product detail
         card.querySelector('.product-click-area').addEventListener('click', () => {
           window.location.href = `product.html?id=${product.id}`;
+        });
+
+        // ✅ Add to Cart logic
+        const addToCartBtn = card.querySelector('.add-to-cart');
+        addToCartBtn.addEventListener('click', (e) => {
+          e.stopPropagation(); // avoid triggering product page redirect
+
+          const cart = JSON.parse(localStorage.getItem('cart')) || [];
+          const existing = cart.find(item => item.id === product.id);
+
+          if (existing) {
+            existing.quantity += 1;
+          } else {
+            cart.push({
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              image_url: product.image_url,
+              quantity: 1
+            });
+          }
+
+          localStorage.setItem('cart', JSON.stringify(cart));
+          window.location.href = 'cart.html';
         });
       });
     })

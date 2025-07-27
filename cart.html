@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pasheon - Cart</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    .cart-section {
+      padding: 100px 20px 40px;
+    }
+
+    .cart-title {
+      font-size: 32px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .cart-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    .cart-table th, .cart-table td {
+      padding: 12px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .cart-table img {
+      width: 60px;
+      height: auto;
+    }
+
+    .remove-btn {
+      background: salmon;
+      color: white;
+      border: none;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+
+    .quantity-input {
+      width: 50px;
+      padding: 4px;
+      text-align: center;
+    font-family: 'Segoe UI';
+    }
+
+    .total-row {
+      text-align: right;
+      font-size: 20px;
+      font-weight: bold;
+      padding-right: 20px;
+    }
+
+    .checkout-btn {
+      display: block;
+      margin: 0 auto;
+      padding: 12px 24px;
+      font-size: 18px;
+      background: black;
+      color: white;
+      border: none;
+      cursor: pointer;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<header class="navbar">
+  <div class="nav-left">
+    <i class="fas fa-bars" id="hamburger-icon"></i>
+  </div>
+  <div class="nav-center">
+    <a href="index.html" class="logo">
+      <img src="log.png" alt="Pasheon Logo" class="log-img" />
+    </a>
+  </div>
+  <div class="nav-right">
+    <a href="cart.html">
+      <i class="fas fa-shopping-cart"></i>
+    </a>
+  </div>
+</header>
+
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar" style="left: -240px;">
+  <a href="index.html"><strong>HOME</strong></a>
+  <a href="contact.html"><strong>CONTACT US</strong></a><br>
+  <a><strong>COLLECTIONS</strong></a>
+  <hr />
+  <div id="category-menu"></div>
+</div>
+
+<!-- Cart Section -->
+<section class="cart-section">
+  <h2 class="cart-title">Your Cart</h2>
+  <table class="cart-table" id="cart-table">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Product</th>
+        <th>Price (₹)</th>
+        <th>Qty</th>
+        <th>Total (₹)</th>
+        <th>Remove</th>
+      </tr>
+    </thead>
+    <tbody id="cart-items">
+      <!-- Items go here -->
+    </tbody>
+  </table>
+
+  <div class="total-row" id="grand-total">Grand Total: ₹0</div>
+  <button class="checkout-btn">Proceed to Checkout</button>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Sidebar logic
+  const hamburger = document.getElementById('hamburger-icon');
+  const sidebar = document.getElementById('sidebar');
+  const categoryLinksContainer = document.getElementById('category-menu');
+
+  if (hamburger && sidebar) {
+    hamburger.addEventListener('click', () => {
+      sidebar.style.left = '0';
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+      sidebar.style.left = '-250px';
+    }
+  });
+
+  // Load categories in sidebar
+  fetch('https://pasheon-backend.onrender.com/api/products/categories')
+    .then(res => res.json())
+    .then(categories => {
+      categoryLinksContainer.innerHTML = '';
+      categories.forEach(cat => {
+        const link = document.createElement('a');
+        link.href = `category.html?cat=${encodeURIComponent(cat)}`;
+        link.textContent = cat;
+        categoryLinksContainer.appendChild(link);
+      });
+    });
+
+  // Cart logic
+  const cartTable = document.getElementById('cart-items');
+  const grandTotalElem = document.getElementById('grand-total');
+
+  let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+  const updateCartDisplay = () => {
+    cartTable.innerHTML = '';
+    let grandTotal = 0;
+
+    if (cart.length === 0) {
+      cartTable.innerHTML = '<tr><td colspan="6">Your cart is empty.</td></tr>';
+      grandTotalElem.textContent = 'Grand Total: ₹0';
+      return;
+    }
+
+    cart.forEach((item, index) => {
+      const row = document.createElement('tr');
+
+      const total = item.price * item.quantity;
+      grandTotal += total;
+
+      row.innerHTML = `
+        <td><img src="${item.image_url}" alt="${item.name}"/></td>
+        <td>${item.name}</td>
+        <td>${item.price}</td>
+        <td>
+          <input type="number" class="quantity-input" value="${item.quantity}" min="1" data-index="${index}" />
+        </td>
+        <td>₹${total}</td>
+        <td><button class="remove-btn" data-index="${index}">X</button></td>
+      `;
+
+      cartTable.appendChild(row);
+    });
+
+    grandTotalElem.textContent = 'Grand Total: ₹' + grandTotal;
+  };
+
+  cartTable.addEventListener('click', (e) => {
+    if (e.target.classList.contains('remove-btn')) {
+      const index = e.target.getAttribute('data-index');
+      cart.splice(index, 1);
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateCartDisplay();
+    }
+  });
+
+  cartTable.addEventListener('change', (e) => {
+    if (e.target.classList.contains('quantity-input')) {
+      const index = e.target.getAttribute('data-index');
+      const newQty = parseInt(e.target.value);
+      if (newQty > 0) {
+        cart[index].quantity = newQty;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartDisplay();
+      }
+    }
+  });
+
+  updateCartDisplay();
+});
+</script>
+
+</body>
+</html>
