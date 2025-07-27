@@ -1,54 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Pasheon</title>
   <link rel="stylesheet" href="style.css" />
-
-  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
   <!-- Top Navigation Bar -->
- <!-- Top Navigation Bar -->
-<header class="navbar">
-  <div class="nav-left">
-    <i class="fas fa-bars" id="hamburger"></i>
-  </div>
-  <div class="nav-center">
-    <!-- Crown Logo Placeholder -->
-   <div class="logo">
-  <a href="index.html">
-    <img src="log.png" alt="Pasheon Logo" class="log-img" />
-  </a>
-</div>
-  </div>
-  <div class="nav-right">
-    <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
-  </div>
-</header>
-
-<!-- Sliding Sidebar Menu -->
-<nav id="sidebar" class="sidebar">
-  <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="contact.html">Contact</a></li>
-    <hr />
-    <div id="category-links">
-      <!-- Categories will be dynamically loaded here if needed -->
+  <header class="navbar">
+    <div class="nav-left">
+      <i class="fas fa-bars" id="hamburger-product"></i>
     </div>
-  </ul>
-</nav>
+    <div class="nav-center">
+      <div class="logo">
+        <a href="index.html">
+          <img src="log.png" alt="Pasheon Logo" class="log-img" />
+        </a>
+      </div>
+    </div>
+    <div class="nav-right">
+      <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+    </div>
+  </header>
+
+  <!-- Product Page Sidebar -->
+  <nav id="sidebar-product" class="sidebar">
+    <ul>
+      <li><a href="index.html"><strong>HOME</strong></a></li>
+      <li><a href="contact.html"><strong>CONTACT US</strong></a></li>
+      <hr /><br>
+      <li><a>C O L L E C T I O N</a></li>
+    </ul>
+    <ul id="category-list">
+      <!-- Categories will be dynamically loaded here -->
+    </ul>
+  </nav>
 
   <main class="product-detail-container">
     <div class="left-column">
       <img id="product-image" class="main-product-image" alt="Product Image" />
-      <div id="extra-images" class="extra-images">
-        <!-- Extra images will appear here -->
-      </div>
+      <div id="extra-images" class="extra-images"></div>
     </div>
 
     <div class="right-column">
@@ -56,11 +51,11 @@
       <p id="product-price" class="product-price"></p>
       <p id="product-description"></p>
       <div class="size-section">
-  <label for="sizeSelect">Select Size:</label>
-  <select id="sizeSelect" required>
-    <option value="">-- Select Size --</option>
-  </select>
-</div>
+        <label for="sizeSelect">Select Size:</label>
+        <select id="sizeSelect" required>
+          <option value="">-- Select Size --</option>
+        </select>
+      </div>
       <button class="add-to-cart">Add to Cart</button>
     </div>
   </main>
@@ -73,13 +68,11 @@
       fetch(`https://pasheon-backend.onrender.com/api/products/${productId}`)
         .then(res => res.json())
         .then(product => {
-          // Main product content
           document.getElementById('product-image').src = product.image_url;
           document.getElementById('product-name').textContent = product.name;
           document.getElementById('product-description').textContent = product.description;
           document.getElementById('product-price').textContent = `₹${parseFloat(product.price).toLocaleString()}`;
 
-          // Extra images
           const extraImagesContainer = document.getElementById('extra-images');
           if (Array.isArray(product.extra_images)) {
             product.extra_images.forEach(url => {
@@ -91,14 +84,15 @@
               extraImagesContainer.appendChild(img);
             });
           }
+
           const sizeSelect = document.getElementById("sizeSelect");
-(product.sizes || []).forEach(size => {
-  const option = document.createElement("option");
-  option.value = size;
-  option.textContent = size;
-  sizeSelect.appendChild(option);
-});
-          // Add to cart
+          (product.sizes || []).forEach(size => {
+            const option = document.createElement("option");
+            option.value = size;
+            option.textContent = size;
+            sizeSelect.appendChild(option);
+          });
+
           document.querySelector('.add-to-cart').addEventListener('click', () => {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             cart.push({
@@ -115,9 +109,38 @@
         .catch(error => {
           console.error('Error fetching product:', error);
         });
+
+      fetch("https://pasheon-backend.onrender.com/api/products/categories")
+  .then(res => res.json())
+  .then(categories => {
+    const categoryList = document.getElementById("category-list");
+    categoryList.innerHTML = '';
+    categories.forEach(category => {
+      const li = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = `category.html?cat=${encodeURIComponent(category)}`;
+      link.textContent = category.charAt(0).toUpperCase() + category.slice(1);
+      li.appendChild(link);
+      categoryList.appendChild(li);
+    });
+  })
+  .catch(err => {
+    console.error("Failed to load categories:", err);
+  });
+      const hamburger = document.getElementById('hamburger-product');
+      const sidebar = document.getElementById('sidebar-product');
+
+      hamburger.addEventListener('click', () => {
+        sidebar.classList.toggle('active');
+      });
+
+      document.addEventListener('click', (e) => {
+        if (!sidebar.contains(e.target) && e.target !== hamburger) {
+          sidebar.classList.remove('active');
+        }
+      });
     });
 
-    // Fullscreen image viewer
     function openFullscreenImage(url) {
       const overlay = document.createElement('div');
       overlay.style.position = 'fixed';
@@ -145,21 +168,8 @@
       overlay.appendChild(img);
       document.body.appendChild(overlay);
     }
-
-    // Sidebar toggle
-document.getElementById('hamburger').addEventListener('click', () => {
-  const sidebar = document.getElementById('sidebar');
-  sidebar.classList.toggle('active');
-});
-
-// Optional: close sidebar when clicking outside of it
-document.addEventListener('click', (e) => {
-  const sidebar = document.getElementById('sidebar');
-  const hamburger = document.getElementById('hamburger');
-  if (!sidebar.contains(e.target) && e.target !== hamburger) {
-    sidebar.classList.remove('active');
-  }
-});
+  
   </script>
+
 </body>
 </html>
