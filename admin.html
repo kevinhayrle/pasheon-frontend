@@ -212,6 +212,14 @@
           <label for="image">Image URL</label>
           <input type="text" id="image" />
         </div>
+        <div class="form-group">
+  <label for="sizes">Sizes (comma-separated)</label>
+  <input type="text" id="sizes" placeholder="e.g. S, M, L or 6, 7, 8" />
+</div>
+<div class="form-group">
+  <label for="extraImages">Extra Image URLs (comma-separated)</label>
+  <input type="text" id="extraImages" placeholder="e.g. https://...jpg, https://...jpg" />
+</div>
         <button class="btn" type="submit" id="submitBtn">Add Product</button>
       </form>
     </div>
@@ -245,8 +253,13 @@
     const category = document.getElementById("category").value;
     const image_url = document.getElementById("image").value;
     const description = document.getElementById("description").value;
+const sizesInput = document.getElementById("sizes").value;
+const extraImagesInput = document.getElementById("extraImages").value;
 
-    const productData = { name, price, category, image_url, description };
+const sizes = sizesInput ? sizesInput.split(',').map(s => s.trim()) : [];
+const extra_images = extraImagesInput ? extraImagesInput.split(',').map(url => url.trim()) : [];
+
+const productData = { name, price, category, image_url, description, sizes, extra_images };
     const endpoint = id ? `/admin/update/${id}` : "/admin/add";
     const method = id ? "PUT" : "POST";
 
@@ -271,16 +284,19 @@
   });
 
   // ✅ Added description to editing logic
-  function editProduct(id, name, price, category, image, description) {
-    document.getElementById("editingId").value = id;
-    document.getElementById("name").value = name;
-    document.getElementById("price").value = price;
-    document.getElementById("category").value = category;
-    document.getElementById("image").value = image || "";
-    document.getElementById("description").value = description || "";
-    submitBtn.textContent = "Update Product";
-    formTitle.textContent = "Edit Product";
-  }
+  function editProduct(id, name, price, category, image, description, sizes = [], extra_images = []) {
+  document.getElementById("editingId").value = id;
+  document.getElementById("name").value = name;
+  document.getElementById("price").value = price;
+  document.getElementById("category").value = category;
+  document.getElementById("image").value = image || "";
+  document.getElementById("description").value = description || "";
+  document.getElementById("sizes").value = Array.isArray(sizes) ? sizes.join(', ') : "";
+  document.getElementById("extraImages").value = Array.isArray(extra_images) ? extra_images.join(', ') : "";
+
+  submitBtn.textContent = "Update Product";
+  formTitle.textContent = "Edit Product";
+}
 
   async function fetchProducts() {
   try {
@@ -315,7 +331,7 @@
           <span class="product-category">Category: ${p.category}</span>
         </div>
         <div class="action-btns">
-          <button class="edit-btn" onclick="editProduct('${p.id}', '${p.name}', '${p.price}', '${p.category}', '${p.image_url || ''}', '${p.description || ''}')">Edit</button>
+          <button class="edit-btn" onclick='editProduct(${JSON.stringify(p.id)}, ${JSON.stringify(p.name)}, ${JSON.stringify(p.price)}, ${JSON.stringify(p.category)}, ${JSON.stringify(p.image_url)}, ${JSON.stringify(p.description)}, ${JSON.stringify(p.sizes)}, ${JSON.stringify(p.extra_images)})'>Edit</button>
           <button class="delete-btn" onclick="deleteProduct('${p.id}')">Delete</button>
         </div>`;
       list.appendChild(div);
@@ -353,6 +369,7 @@ function deleteProduct(id) {
   }
 
   fetchProducts();
+  
 </script>
 </body>
 </html>

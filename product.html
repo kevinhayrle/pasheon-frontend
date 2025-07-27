@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pasheon</title>
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Font Awesome Icons -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+ <!-- Top Navigation Bar -->
+<header class="navbar">
+  <div class="nav-left">
+    <i class="fas fa-bars" id="hamburger"></i>
+  </div>
+  <div class="nav-center">
+    <!-- Crown Logo Placeholder -->
+   <div class="logo">
+  <a href="index.html">
+    <img src="log.png" alt="Pasheon Logo" class="log-img" />
+  </a>
+</div>
+  </div>
+  <div class="nav-right">
+    <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+  </div>
+</header>
+
+<!-- Sliding Sidebar Menu -->
+<nav id="sidebar" class="sidebar">
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="contact.html">Contact</a></li>
+    <hr />
+    <div id="category-links">
+      <!-- Categories will be dynamically loaded here if needed -->
+    </div>
+  </ul>
+</nav>
+
+  <main class="product-detail-container">
+    <div class="left-column">
+      <img id="product-image" class="main-product-image" alt="Product Image" />
+      <div id="extra-images" class="extra-images">
+        <!-- Extra images will appear here -->
+      </div>
+    </div>
+
+    <div class="right-column">
+      <h1 id="product-name"></h1>
+      <p id="product-price" class="product-price"></p>
+      <p id="product-description"></p>
+      <div class="size-section">
+  <label for="sizeSelect">Select Size:</label>
+  <select id="sizeSelect" required>
+    <option value="">-- Select Size --</option>
+  </select>
+</div>
+      <button class="add-to-cart">Add to Cart</button>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const productId = params.get('id');
+
+      fetch(`https://pasheon-backend.onrender.com/api/products/${productId}`)
+        .then(res => res.json())
+        .then(product => {
+          // Main product content
+          document.getElementById('product-image').src = product.image_url;
+          document.getElementById('product-name').textContent = product.name;
+          document.getElementById('product-description').textContent = product.description;
+          document.getElementById('product-price').textContent = `₹${parseFloat(product.price).toLocaleString()}`;
+
+          // Extra images
+          const extraImagesContainer = document.getElementById('extra-images');
+          if (Array.isArray(product.extra_images)) {
+            product.extra_images.forEach(url => {
+              const img = document.createElement('img');
+              img.src = url;
+              img.classList.add('extra-image');
+              img.style.cursor = 'zoom-in';
+              img.addEventListener('click', () => openFullscreenImage(url));
+              extraImagesContainer.appendChild(img);
+            });
+          }
+          const sizeSelect = document.getElementById("sizeSelect");
+(product.sizes || []).forEach(size => {
+  const option = document.createElement("option");
+  option.value = size;
+  option.textContent = size;
+  sizeSelect.appendChild(option);
+});
+          // Add to cart
+          document.querySelector('.add-to-cart').addEventListener('click', () => {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            cart.push({
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              image_url: product.image_url,
+              category: product.category
+            });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            window.location.href = '/cart.html';
+          });
+        })
+        .catch(error => {
+          console.error('Error fetching product:', error);
+        });
+    });
+
+    // Fullscreen image viewer
+    function openFullscreenImage(url) {
+      const overlay = document.createElement('div');
+      overlay.style.position = 'fixed';
+      overlay.style.top = 0;
+      overlay.style.left = 0;
+      overlay.style.width = '100vw';
+      overlay.style.height = '100vh';
+      overlay.style.background = 'rgba(0, 0, 0, 0.9)';
+      overlay.style.display = 'flex';
+      overlay.style.alignItems = 'center';
+      overlay.style.justifyContent = 'center';
+      overlay.style.zIndex = 1000;
+
+      const img = document.createElement('img');
+      img.src = url;
+      img.style.maxWidth = '90%';
+      img.style.maxHeight = '90%';
+      img.style.border = '2px solid white';
+      img.style.borderRadius = '8px';
+
+      overlay.addEventListener('click', () => {
+        document.body.removeChild(overlay);
+      });
+
+      overlay.appendChild(img);
+      document.body.appendChild(overlay);
+    }
+
+    // Sidebar toggle
+document.getElementById('hamburger').addEventListener('click', () => {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.classList.toggle('active');
+});
+
+// Optional: close sidebar when clicking outside of it
+document.addEventListener('click', (e) => {
+  const sidebar = document.getElementById('sidebar');
+  const hamburger = document.getElementById('hamburger');
+  if (!sidebar.contains(e.target) && e.target !== hamburger) {
+    sidebar.classList.remove('active');
+  }
+});
+  </script>
+</body>
+</html>
