@@ -555,3 +555,17 @@ margin-top: 50px;
   background-color: #575757;
   border-radius: 4px;
 }
+
+.product-card {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+.close-btn {
+  font-size: 25px;
+  color: #01381C;
+  cursor: pointer;
+  display: block;
+  text-align: left;
+  
+}

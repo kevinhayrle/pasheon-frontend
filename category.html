@@ -2,74 +2,148 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Category | Pasheon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pasheon - Category</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate {
+      animation: fadeInUp 0.6s ease forwards;
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <div class="navbar">
-    <div class="nav-left">
-      <img src="hamburger.svg" alt="Menu" class="nav-icon" />
-    </div>
-    <div class="nav-center">
-      <img src="crown-logo.png" alt="Pasheon Logo" class="nav-logo" />
-    </div>
-    <div class="nav-right">
-      <img src="heart.svg" alt="Wishlist" class="nav-icon" />
-      <img src="cart.svg" alt="Cart" class="nav-icon" />
-    </div>
+<!-- Top Navigation Bar -->
+<header class="navbar">
+  <div class="nav-left">
+    <i class="fas fa-bars" id="hamburger-icon"></i>
   </div>
 
-  <!-- Category Title -->
-  <h2 class="category-title" style="text-align: center; margin-top: 80px; font-family: 'copper'; font-size: 32px;"></h2>
+  <div class="nav-center">
+    <a href="index.html" class="logo">
+      <img src="log.png" alt="Pasheon Logo" class="log-img">
+    </a>
+  </div>
 
-  <!-- Product Grid -->
-  <div class="product-grid" style="margin-top: 20px;"></div>
+  <div class="nav-right">
+    <a href="cart.html">
+      <i class="fas fa-shopping-cart"></i>
+    </a>
+  </div>
+</header>
 
-  <!-- Script to fetch and filter products by category -->
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const selectedCategory = params.get("cat");
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar" style="left: -240px;">
+  <div id="close-sidebar-category" class="close-btn">&times;</div>
+  <a href="index.html"><strong>HOME</strong></a>
+  <a href="contact.html"><strong>CONTACT US</strong></a><br>
+  <a><strong>COLLECTIONS</strong></a>
+  <hr/>
+  <div id="category-menu"></div>
+</div>
 
-    document.querySelector(".category-title").textContent = selectedCategory 
-      ? `Category: ${selectedCategory}` 
-      : "All Products";
+<!-- Hero Section -->
+<section class="hero">
+  <h1 class="brand-name"><strong>PASHEON</strong></h1>
+</section>
 
-    fetch("https://pasheon-backend.onrender.com/api/products")
-      .then(res => res.json())
-      .then(products => {
-        const grid = document.querySelector(".product-grid");
-        if (!selectedCategory) return;
+<!-- Product Section -->
+<section id="products-section">
+  <h2 class="section-title" id="category-title">Category</h2>
+  <div id="product-container" class="product-grid">
+    <!-- Dynamic category products go here -->
+  </div>
+</section>
 
-        const filtered = products.filter(p =>
-          p.category && p.category.toLowerCase() === selectedCategory.toLowerCase()
-        );
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const productContainer = document.getElementById('product-container');
+  const urlParams = new URLSearchParams(window.location.search);
+  const category = urlParams.get('cat');
 
-        if (filtered.length === 0) {
-          grid.innerHTML = <p style="text-align:center; font-family:sans-serif;">No products found in category: ${selectedCategory}</p>;
-          return;
-        }
+  // Load all products
+  fetch('https://pasheon-backend.onrender.com/api/products')
+    .then(res => res.json())
+    .then(products => {
+      const filtered = products.filter(p =>
+        p.category.toLowerCase() === category.toLowerCase()
+      );
 
-        filtered.forEach(product => {
-          const card = document.createElement("div");
-          card.className = "product-card";
-          card.innerHTML = `
-            <img src="${product.image_url}" alt="${product.name}">
-            <h3>${product.name}</h3>
-            <p>₹${product.price}</p>
-          `;
-          grid.appendChild(card);
+      if (filtered.length === 0) {
+        productContainer.innerHTML = '<p>No products found in this category.</p>';
+        return;
+      }
+
+      filtered.forEach(product => {
+        const card = document.createElement('div');
+        card.classList.add('product-card');
+        card.innerHTML = `
+          <div class="product-click-area" data-id="${product.id}">
+            <img src="${product.image_url}" alt="${product.name}" class="product-image">
+            <h3 class="product-name">${product.name}</h3>
+            <p class="product-price">₹${parseFloat(product.price).toLocaleString()}</p>
+          </div>
+          <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
+        `;
+        productContainer.appendChild(card);
+
+        card.querySelector('.product-click-area').addEventListener('click', () => {
+          window.location.href = `product.html?id=${product.id}`;
         });
-      })
-      .catch(error => {
-        console.error("Error loading products:", error);
-        document.querySelector(".product-grid").innerHTML = <p style="text-align:center;">Error loading products.</p>;
       });
-  </script>
+    })
+    .catch(err => {
+      console.error('Error loading products:', err);
+      productContainer.innerHTML = '<p>Failed to load products.</p>';
+    });
+
+  // Hamburger & Sidebar Logic (cloned from index.html)
+  const hamburger = document.getElementById('hamburger-icon');
+  const sidebar = document.getElementById('sidebar');
+  const closeSidebar = document.getElementById('close-sidebar-category');
+  const categoryLinksContainer = document.getElementById('category-menu');
+
+  if (hamburger && sidebar) {
+    hamburger.addEventListener('click', () => {
+      sidebar.style.left = '0';
+    });
+  }
+
+  if (closeSidebar && sidebar) {
+    closeSidebar.addEventListener('click', () => {
+      sidebar.style.left = '-250px';
+    });
+  }
+
+  // Fetch categories dynamically for sidebar
+  fetch('https://pasheon-backend.onrender.com/api/products/categories')
+    .then(res => res.json())
+    .then(categories => {
+      categoryLinksContainer.innerHTML = '';
+      categories.forEach(cat => {
+        const link = document.createElement('a');
+        link.href = `category.html?cat=${encodeURIComponent(cat)}`;
+        link.textContent = cat;
+        categoryLinksContainer.appendChild(link);
+      });
+    })
+    .catch(err => {
+      console.error('Failed to load categories:', err);
+    });
+});
+</script>
 
 </body>
 </html>
