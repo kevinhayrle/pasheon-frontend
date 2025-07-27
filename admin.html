@@ -17,7 +17,6 @@
       display: flex;
     }
 
-    /* Sidebar */
     .sidebar {
       width: 200px;
       background-color: #01381C;
@@ -52,7 +51,6 @@
       background-color: #a93226;
     }
 
-    /* Main Content */
     .main {
       margin-left: 200px;
       width: calc(100% - 200px);
@@ -230,7 +228,6 @@
     </div>
   </div>
 
-<!-- ✅ MODIFIED SECTION in your existing file -->
 <script>
   const token = localStorage.getItem("adminToken");
   const API = "https://pasheon-backend.onrender.com/api";
@@ -247,7 +244,7 @@
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const id = document.getElementById("editingId").value; // ✅ FIXED LINE
+    const id = document.getElementById("editingId").value; 
     const name = document.getElementById("name").value;
     const price = document.getElementById("price").value;
     const category = document.getElementById("category").value;
@@ -283,7 +280,7 @@ const productData = { name, price, category, image_url, description, sizes, extr
     }
   });
 
-  // ✅ Added description to editing logic
+
   function editProduct(id, name, price, category, image, description, sizes = [], extra_images = []) {
   document.getElementById("editingId").value = id;
   document.getElementById("name").value = name;
@@ -304,7 +301,6 @@ const productData = { name, price, category, image_url, description, sizes, extr
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    // ✅ CHECK for server-side error before parsing JSON
     if (!res.ok) {
       const errorText = await res.text();
       console.error("Failed to fetch products:", errorText);
@@ -352,7 +348,7 @@ function deleteProduct(id) {
       .then(res => {
         if (res.ok) {
           alert("Product deleted successfully.");
-          fetchProducts(); // Refresh the list
+          fetchProducts(); 
         } else {
           alert("Failed to delete the product.");
         }

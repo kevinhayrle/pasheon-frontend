@@ -45,7 +45,7 @@
   </div>
 </header>
 
-<!-- Sidebar Menu -->
+
 <div id="sidebar" class="sidebar" style="left: -240px;">
   <a href="index.html"><STRONG>HOME</STRONG></a>
   <a href="contact.html"><STRONG>CONTACT US</STRONG></a><br>
@@ -54,16 +54,16 @@
   <div id="category-menu"></div>
 </div>
 
-<!-- Hero Section -->
+
 <section class="hero">
   <h1 class="brand-name"><strong>PASHEON</strong></h1>
 </section>
 
-<!-- Product Section -->
+
 <section id="products-section">
   <h2 class="section-title">New Arrivals</h2>
   <div id="product-container" class="product-grid">
-    <!-- Dynamic products will be injected here by JavaScript -->
+   
   </div>
 </section>
 
@@ -74,13 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const categoryMenu = document.getElementById('category-menu');
   const productContainer = document.getElementById('product-container');
 
-  // Sidebar toggle
+
   hamburger.addEventListener('click', () => {
     const isVisible = sidebar.style.left === '0px';
     sidebar.style.left = isVisible ? '-240px' : '0px';
   });
 
-  // Fetch and display categories dynamically
   fetch('https://pasheon-backend.onrender.com/api/products/categories')
     .then(res => res.json())
     .then(categories => {
@@ -95,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
     })
     .catch(err => console.error('Error loading categories:', err));
 
-  // Setup observer for animation
+ 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -107,7 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
     threshold: 0.1
   });
 
-  // Fetch and display products
+ 
   fetch("https://pasheon-backend.onrender.com/api/products")
     .then(res => res.json())
     .then(products => {
@@ -125,16 +124,13 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
 
         productContainer.appendChild(productCard);
-        observer.observe(productCard); // Animate on scroll
+        observer.observe(productCard); 
 
-        // Redirect to product page
         productCard.querySelector('.product-click-area').addEventListener('click', () => {
           window.location.href = `product.html?id=${product.id}`;
         });
       });
 
-      // Add to cart logic
-     // Disable Add to Cart on index.html — force user to go to product.html
 document.querySelectorAll('.add-to-cart').forEach(button => {
   button.addEventListener('click', (e) => {
     e.preventDefault();

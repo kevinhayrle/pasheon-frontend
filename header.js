@@ -1,4 +1,3 @@
-// Inject top navbar + sidebar into every page
 document.addEventListener('DOMContentLoaded', () => {
   const headerHTML = `
     <header class="navbar">
@@ -19,20 +18,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.body.insertAdjacentHTML('afterbegin', headerHTML);
 
-  // Now fetch and populate categories
+  
   fetch('https://pasheon-backend.onrender.com/api/products/categories')
     .then(res => res.json())
     .then(categories => {
       const menu = document.getElementById('category-menu');
 
-      // Static links first
+ 
       menu.innerHTML = `
         <a href="index.html">Home</a>
         <a href="contact.html">Contact Us</a>
         <hr/>
       `;
 
-      // Dynamic categories
       categories.forEach(cat => {
         const item = document.createElement('a');
         item.href = `category.html?cat=${encodeURIComponent(cat)}`;
@@ -44,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(err => console.error('Error loading categories:', err));
 });
 
-// Toggle menu function (required globally)
+
 function toggleCategoryMenu() {
   const menu = document.getElementById('category-menu');
   if (menu) {

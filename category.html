@@ -25,7 +25,7 @@
 </head>
 <body>
 
-<!-- Top Navigation Bar -->
+
 <header class="navbar">
   <div class="nav-left">
     <i class="fas fa-bars" id="hamburger-icon"></i>
@@ -44,7 +44,7 @@
   </div>
 </header>
 
-<!-- Sidebar -->
+
 <div id="sidebar" class="sidebar" style="left: -240px;">
   <div id="close-sidebar-category" class="close-btn">&times;</div>
   <a href="index.html"><strong>HOME</strong></a>
@@ -54,16 +54,16 @@
   <div id="category-menu"></div>
 </div>
 
-<!-- Hero Section -->
+
 <section class="hero">
   <h1 class="brand-name"><strong>PASHEON</strong></h1>
 </section>
 
-<!-- Product Section -->
+
 <section id="products-section">
   <h2 class="section-title" id="category-title">Category</h2>
   <div id="product-container" class="product-grid">
-    <!-- Dynamic category products go here -->
+    
   </div>
 </section>
 
@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const urlParams = new URLSearchParams(window.location.search);
   const category = urlParams.get('cat');
 
-  // Load all products
+
   fetch('https://pasheon-backend.onrender.com/api/products')
     .then(res => res.json())
     .then(products => {
@@ -99,13 +99,12 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         productContainer.appendChild(card);
 
-        // Navigate to product detail
+      
         card.querySelector('.product-click-area').addEventListener('click', () => {
           window.location.href = `product.html?id=${product.id}`;
         });
 
-        // ✅ Add to Cart logic
-        // 🔁 Force user to open product.html to select size
+        
 const addToCartBtn = card.querySelector('.add-to-cart');
 addToCartBtn.addEventListener('click', (e) => {
   e.stopPropagation();
@@ -119,7 +118,7 @@ addToCartBtn.addEventListener('click', (e) => {
       productContainer.innerHTML = '<p>Failed to load products.</p>';
     });
 
-  // Hamburger & Sidebar Logic (cloned from index.html)
+
   const hamburger = document.getElementById('hamburger-icon');
   const sidebar = document.getElementById('sidebar');
   const closeSidebar = document.getElementById('close-sidebar-category');
@@ -137,7 +136,6 @@ addToCartBtn.addEventListener('click', (e) => {
     });
   }
 
-  // Fetch categories dynamically for sidebar
   fetch('https://pasheon-backend.onrender.com/api/products/categories')
     .then(res => res.json())
     .then(categories => {

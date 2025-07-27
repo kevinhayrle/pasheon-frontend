@@ -118,7 +118,7 @@
 </head>
 <body>
 
-  <!-- Header -->
+
   <header class="navbar">
     <div class="navbar-left">
       <img id="hamburger-cart" src="hamburger.png" alt="Menu" width="30" height="30" />
@@ -135,7 +135,7 @@
     </div>
   </header>
 
-  <!-- Sidebar -->
+  
   <aside id="sidebar-cart" class="sidebar">
     <span id="close-sidebar-cart" class="close-btn">&times;</span>
     <a href="index.html"><strong>HOME</strong></a>
@@ -146,22 +146,22 @@
     <div id="category-links-cart"></div>
   </aside>
 
-<!-- Cart Title -->
+
 <div class="title-cart">Y</div>
 
-<!-- Checkout Button -->
-<button id="checkout-btn">Checkout</button>
 
-  <!-- Cart Container -->
+<button id="checkout-btn">Pay Now</button>
+
+
   <div id="cart-container" class="cart-container"></div>
 
-  <!-- Grand Total -->
+  
   <div id="grand-total" class="grand-total"></div>
 
-  <!-- Script -->
+
 <script>
   document.addEventListener('DOMContentLoaded', () => {
-    // Sidebar toggle
+  
     const hamburger = document.getElementById('hamburger-cart');
     const sidebar = document.getElementById('sidebar-cart');
     const closeSidebar = document.getElementById('close-sidebar-cart');
@@ -174,7 +174,7 @@
       sidebar.style.left = '-250px';
     });
 
-    // Load categories
+
     fetch('https://pasheon-backend.onrender.com/api/products/categories')
       .then(res => res.json())
       .then(categories => {
@@ -232,23 +232,22 @@
 
     updateCartUI();
 
-    // Remove item on click
+    
     container.addEventListener('click', (e) => {
       if (e.target.classList.contains('remove-btn')) {
         const item = e.target.closest('.cart-item');
         const id = item.getAttribute('data-id');
         const size = item.getAttribute('data-size') || '';
 
-        // Filter and update cart
+     
         cart = cart.filter(p => !(p.id == id && (p.size || '') === size));
         localStorage.setItem('cart', JSON.stringify(cart));
 
-        // Refresh cart UI
         updateCartUI();
       }
     });
 
-    // Checkout button
+    
     checkoutBtn.addEventListener('click', () => {
       window.location.href = 'checkout.html';
     });

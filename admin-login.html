@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>Admin Login | Pasheon</title>
   <style>
-    /* Reset + Branding */
     * {
       margin: 0;
       padding: 0;
@@ -85,7 +84,6 @@
     </form>
   </div>
 
-  <!-- Inline JS for admin login -->
   <script>
     document.getElementById('admin-login-form').addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -107,7 +105,7 @@
 
         if (res.ok) {
           localStorage.setItem('adminToken', data.token);
-          window.location.href = 'admin.html'; // success
+          window.location.href = 'admin.html'; 
         } else {
           errorMsg.textContent = data.message || 'Invalid credentials';
         }
