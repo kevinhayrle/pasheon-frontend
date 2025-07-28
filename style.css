@@ -233,13 +233,7 @@ body, html {
   margin-bottom: 10px;
 }
 
-.product-card {
-  width: 100%;
-  max-width: 300px; 
-  margin: 15px;
-  text-align: center;
-  flex-shrink: 0;
-}
+
 
 .product-image {
   width: 100%;
