@@ -479,11 +479,6 @@ margin-top: 50px;
   text-decoration: underline;
 }
 
-.product-card {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
 
 .product-card.animate {
   opacity: 1;
