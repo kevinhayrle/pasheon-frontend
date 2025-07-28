@@ -80,18 +80,24 @@
   .add-to-cart:hover {
     background-color: #222;
   }
-
-  @media (max-width: 768px) {
-    .product-grid {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      padding: 20px 16px;
-    }
-
-    .product-card {
-      padding: 8px;
-    }
+@media (max-width: 768px) {
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+    width: 100%;
+    max-width: 600px;
+    box-sizing: border-box;
   }
+
+  .product-card {
+    padding: 8px;
+  }
+}
 </style>
 </head>
 <body>
