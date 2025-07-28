@@ -152,7 +152,7 @@
   const orderRes = await fetch("https://pasheon-backend.onrender.com/api/checkout/create-order", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ amount: total * 100 }) // amount in paisa
+body: JSON.stringify({ amount: Math.max(100, Math.round(total * 100)) }) // Ensure at least ₹1 (100 paisa)
   });
 
   const orderData = await orderRes.json();
