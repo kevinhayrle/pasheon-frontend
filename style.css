@@ -165,12 +165,12 @@ body, html {
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  justify-content: center;
+  align-items:stretch;
   gap: 20px;
-  flex-wrap: wrap;
   padding: 40px 20px;
   max-width: 1200px;
   margin: 0 auto;
+  margin-left: 15px;
 }
 
 .product-card {
