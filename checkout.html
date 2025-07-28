@@ -171,7 +171,8 @@ body: JSON.stringify({ total_amount: Math.max(100, Math.round(total * 100)) }) /
         phone,
         address,
         cart,
-        payment: response.razorpay_payment_id
+        payment: response.razorpay_payment_id,
+        total_amount: Math.max(1, total)
       };
 
       const res = await fetch("https://pasheon-backend.onrender.com/api/checkout", {
