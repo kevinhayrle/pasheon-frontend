@@ -149,7 +149,7 @@
   const address = document.getElementById('address').value.trim();
 
   // First call your backend to create a Razorpay Order
-  const orderRes = await fetch("https://pasheon-backend.onrender.com/api/checkout", {
+  const orderRes = await fetch("https://pasheon-backend.onrender.com/api/orders/checkout", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ amount: total * 100 }) // amount in paisa
