@@ -123,7 +123,7 @@
       ordersDiv.innerHTML = "<p>Loading...</p>";
 
       try {
-        const res = await fetch(`/api/orders/${phone}`);
+        const res = await fetch(`https://pasheon-backend.onrender.com/api/orders/${phone}`);
         const data = await res.json();
 
         if (data.length === 0) {
