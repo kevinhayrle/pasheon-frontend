@@ -126,76 +126,86 @@
 
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
-    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-    const cartItemsContainer = document.getElementById('cart-items');
-    const totalAmountEl = document.getElementById('total-amount');
-    const form = document.getElementById('checkout-form');
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const cartItemsContainer = document.getElementById('cart-items');
+  const totalAmountEl = document.getElementById('total-amount');
+  const form = document.getElementById('checkout-form');
 
-    let total = 0;
-    cart.forEach(item => {
-      const li = document.createElement('li');
-      li.textContent = `${item.name} | Size - (${item.size}) | Quantity - ${item.quantity} | ₹${item.price * item.quantity}`;
-      cartItemsContainer.appendChild(li);
-      total += item.price * item.quantity;
-    });
-    totalAmountEl.textContent = total;
+  let total = 0;
+  cart.forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = `${item.name} | Size - (${item.size}) | Quantity - ${item.quantity} | ₹${item.price * item.quantity}`;
+    cartItemsContainer.appendChild(li);
+    total += item.price * item.quantity;
+  });
+  totalAmountEl.textContent = total;
 
   form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const name = document.getElementById('name').value.trim();
-  const email = document.getElementById('email').value.trim();
-  const phone = document.getElementById('phone').value.trim();
-  const address = document.getElementById('address').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const phone = document.getElementById('phone').value.trim();
+    const address = document.getElementById('address').value.trim();
 
-  // First call your backend to create a Razorpay Order
-  const orderRes = await fetch("https://pasheon-backend.onrender.com/api/checkout/create-order", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-body: JSON.stringify({ total_amount: Math.max(100, Math.round(total * 100)) }) // Ensure at least ₹1 (100 paisa)
+    // ✅ Convert total amount from ₹ to paisa (₹2 = 200 paisa)
+    const totalInPaisa = Math.max(100, Math.round(total * 100)); 
+    console.log("💰 Total in ₹:", total);
+    console.log("💰 Total in paisa sent to backend:", totalInPaisa);
+
+    // 🧾 Step 1: Create Razorpay Order
+    const orderRes = await fetch("https://pasheon-backend.onrender.com/api/checkout/create-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ total_amount: totalInPaisa })
+    });
+
+    const orderData = await orderRes.json();
+    console.log("🧾 Razorpay Order Response:", orderData);
+
+    // 💳 Step 2: Open Razorpay Checkout
+    const options = {
+      key: "rzp_live_2cgxTjOWXcFeTm",
+      amount: orderData.amount,
+      currency: "INR",
+      name: "Pasheon",
+      description: "Order Payment",
+      order_id: orderData.id,
+      handler: async function (response) {
+        console.log("✅ Payment Successful:", response);
+
+        const finalOrder = {
+          name,
+          email,
+          phone,
+          address,
+          cart,
+          payment: response.razorpay_payment_id,
+          total_amount: totalInPaisa
+        };
+
+        // 📨 Step 3: Send Order Data to Backend
+        const res = await fetch("https://pasheon-backend.onrender.com/api/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(finalOrder)
+        });
+
+        if (res.ok) {
+          alert("Order placed successfully!");
+          localStorage.removeItem('cart');
+          window.location.href = "index.html";
+        } else {
+          alert("Payment successful, but order saving failed. Contact support.");
+        }
+      },
+      prefill: { name, email, contact: phone },
+      theme: { color: "#01381C" }
+    };
+
+    const rzp = new Razorpay(options);
+    rzp.open();
   });
-
-  const orderData = await orderRes.json();
-
-  const options = {
-    key: "rzp_live_2cgxTjOWXcFeTm",
-    amount: orderData.amount,
-    currency: "INR",
-    name: "Pasheon",
-    description: "Order Payment",
-    order_id: orderData.id, // <-- Very important
-    handler: async function (response) {
-      const finalOrder = {
-        name,
-        email,
-        phone,
-        address,
-        cart,
-        payment: response.razorpay_payment_id,
-        total_amount: Math.max(1, total)
-      };
-
-      const res = await fetch("https://pasheon-backend.onrender.com/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(finalOrder)
-      });
-
-      if (res.ok) {
-        alert("Order placed successfully!");
-        localStorage.removeItem('cart');
-        window.location.href = "index.html";
-      } else {
-        alert("Payment successful, but order saving failed. Contact support.");
-      }
-    },
-    prefill: { name, email, contact: phone },
-    theme: { color: "#01381C" }
-  };
-
-  const rzp = new Razorpay(options);
-  rzp.open();
-});
-  </script>
+</script>
 </body>
 </html>
