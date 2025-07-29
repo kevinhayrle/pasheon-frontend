@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Checkout - Pasheon</title>
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     * {
@@ -148,12 +149,12 @@
     const phone = document.getElementById('phone').value.trim();
     const address = document.getElementById('address').value.trim();
 
-    // ✅ Convert total amount from ₹ to paisa (₹2 = 200 paisa)
+
     const totalInPaisa = Math.max(100, Math.round(total * 100)); 
     console.log("💰 Total in ₹:", total);
     console.log("💰 Total in paisa sent to backend:", totalInPaisa);
 
-    // 🧾 Step 1: Create Razorpay Order
+  
     const orderRes = await fetch("https://pasheon-backend.onrender.com/api/checkout/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -163,7 +164,6 @@
     const orderData = await orderRes.json();
     console.log("🧾 Razorpay Order Response:", orderData);
 
-    // 💳 Step 2: Open Razorpay Checkout
     const options = {
       key: "rzp_live_2cgxTjOWXcFeTm",
       amount: orderData.amount,
@@ -184,7 +184,6 @@
           total_amount: totalInPaisa
         };
 
-        // 📨 Step 3: Send Order Data to Backend
         const res = await fetch("https://pasheon-backend.onrender.com/api/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
