@@ -106,7 +106,6 @@ body, html {
 .product {
   background: lightgrey; 
   border: 1px solid #ccc;
-  border-radius: 8px;
   text-align: center;
   padding: 1rem;
   transition: transform 0.2s ease;
@@ -119,7 +118,7 @@ body, html {
 .product img {
   width: 100%;
   height: auto;
-  border-radius: 6px;
+
 }
 
 .product h3 {
