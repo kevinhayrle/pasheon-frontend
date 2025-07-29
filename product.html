@@ -8,6 +8,15 @@
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+<style>
+  #sizeSelect {
+  font-size: 14px;
+  padding: 6px 10px;
+  min-width: 140px;
+  border-radius: 4px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+</style>
 </head>
 <body>
 
@@ -51,9 +60,9 @@
       <p id="product-price" class="product-price"></p>
       <p id="product-description"></p>
       <div class="size-section">
-        <label for="sizeSelect">Select Size:</label>
+        <label for="sizeSelect" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Size:</label>
         <select id="sizeSelect" required>
-          <option value="">-- Select Size --</option>
+          <option value="">Select Size</option>
         </select>
       </div>
       <button class="add-to-cart">Add to Cart</button>
