@@ -33,4 +33,4 @@ Frontend code is © 2025 Kevin Antony.
 All rights reserved. Reuse, distribution, or replication is prohibited without written permission.
 
 # Live Site
-https://pasheon.netlify.app/
+www.pasheon.com
