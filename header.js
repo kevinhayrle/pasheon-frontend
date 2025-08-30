@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.body.insertAdjacentHTML('afterbegin', headerHTML);
 
   
-  fetch('https://pasheon-backend.onrender.com/api/products/categories')
+  fetch('https://pasheon-backend-zgz5.onrender.com/api/products/categories')
     .then(res => res.json())
     .then(categories => {
       const menu = document.getElementById('category-menu');

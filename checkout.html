@@ -155,7 +155,7 @@
     console.log("💰 Total in paisa sent to backend:", totalInPaisa);
 
   
-    const orderRes = await fetch("https://pasheon-backend.onrender.com/api/checkout/create-order", {
+    const orderRes = await fetch("https://pasheon-backend-zgz5.onrender.com/api/checkout/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ total_amount: totalInPaisa })
@@ -184,7 +184,7 @@
           total_amount: totalInPaisa
         };
 
-        const res = await fetch("https://pasheon-backend.onrender.com/api/checkout", {
+        const res = await fetch("https://pasheon-backend-zgz5.onrender.com/api/checkout", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(finalOrder)

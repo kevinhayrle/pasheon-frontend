@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const category = urlParams.get('cat');
 
 
-  fetch('https://pasheon-backend.onrender.com/api/products')
+  fetch('https://pasheon-backend-zgz5.onrender.com/api/products')
     .then(res => res.json())
     .then(products => {
       const filtered = products.filter(p =>
@@ -214,7 +214,7 @@ addToCartBtn.addEventListener('click', (e) => {
     });
   }
 
-  fetch('https://pasheon-backend.onrender.com/api/products/categories')
+  fetch('https://pasheon-backend-zgz5.onrender.com/api/products/categories')
     .then(res => res.json())
     .then(categories => {
       categoryLinksContainer.innerHTML = '';
